@@ -1,0 +1,32 @@
+.icon {
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.role-dps-32 {
+    background: url('../img/icons.png') -96px 0;
+    background-size: 128px 32px;
+    height: 32px;
+    width: 32px;
+}
+
+.role-heal-32 {
+    background: url('../img/icons.png') -64px 0;
+    background-size: 128px 32px;
+    height: 32px;
+    width: 32px;
+}
+
+.role-rl-32 {
+    background: url('../img/icons.png') 0 0;
+    background-size: 128px 32px;
+    height: 32px;
+    width: 32px;
+}
+
+.role-tank-32 {
+    background: url('../img/icons.png') -32px 0;
+    background-size: 128px 32px;
+    height: 32px;
+    width: 32px;
+}
