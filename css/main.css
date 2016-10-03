@@ -19,3 +19,15 @@
 .tooltip img {
     max-height: 32px;
 }
+
+.zone-table th,
+.zone-table td {
+    text-align: center;
+}
+
+.zone-table td:first-child {
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 1%;
+}
