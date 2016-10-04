@@ -7,6 +7,12 @@
     max-width: 100%;
 }
 
+.list-group-item .table,
+.panel-body .list-group,
+.panel-body .table {
+    margin-bottom: 0;
+}
+
 .role-list li:hover{
     background: #E9E9E9;
     border-radius: 4px;
