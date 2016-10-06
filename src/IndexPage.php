@@ -4,34 +4,66 @@ require_once("Page.php");
 
 class IndexPage extends Page
 {
+	private $bosses = NULL;
 	private $data = NULL;
 	private $difficulties = NULL;
 	private $instances = NULL;
 	private $instanceTypes = NULL;
+	private $roles = NULL;
 	
 	public function __construct()
 	{
 		$this->data = new ModelDataManager();
+		$this->bosses = $this->data->getBosses();
 		$this->difficulties = $this->data->getDifficulties();
 		$this->instances = $this->data->getInstances();
 		$this->instanceTypes = $this->data->getInstanceTypes();
+		$this->roles = $this->data->getRoles();
 	}
 	
 	protected function renderBody()
 	{
 		?>
-		<div class="container">
-			<h1>Fiches strat</h1>
-			<?php
-				foreach($this->instanceTypes as $instanceType) {
-					$this->renderInstancesByType($instanceType, $this->instances);
-				}
+		<h1>Fiches strat</h1>
+		<?php
+			foreach($this->instanceTypes as $instanceType) {
+				$this->renderInstancesByType($instanceType, $this->instances);
+			}
+	}
+	
+	private function renderCardLink($boss, $difficulty, $role)
+	{
+		$card = $this->data->getCard($boss->key, $difficulty->key, $role->key);
+		
+		if(is_null($card)) {
 			?>
+				<span class="icon role-<?= $role->key ?>-disabled-32"></span>
+			<?php
+		}
+		else {
+			?>
+				<a class="icon role-<?= $role->key ?>-32" href="<?= $card->getUrl() ?>" data-toggle="tooltip" title="<?= $card->getTooltip() ?>"></a>
+			<?php
+		}
+	}
+	
+	private function renderInstance($instance)
+	{
+		?>
+		<div class="list-group-item">
+			<div class="list-group-item-heading" data-toggle="collapse" data-target="#<?= $instance->type->key ?>-<?= $instance->key ?>-table">
+				<h4><?= $instance->name ?></h4>
+			</div>
+			<div id="<?= $instance->type->key ?>-<?= $instance->key ?>-table" class="collapse in">
+				<?php
+					$this->renderInstanceLinks($instance);
+				?>
+			</div>
 		</div>
 		<?php
 	}
 	
-	private function renderCardLinks()
+	private function renderInstanceLinks($instance)
 	{
 		?>
 		<table class="table table-condensed table-responsive zone-table">
@@ -46,24 +78,32 @@ class IndexPage extends Page
 						}
 					?>
 				</tr>
+				<?php
+					foreach($this->bosses as $boss) {
+						if($boss->instance->key == $instance->key) {
+							?>
+							<tr>
+								<td><?= $boss->name ?></td>
+								<?php
+									foreach($this->difficulties as $difficulty) {
+										?>
+										<td>
+											<?php
+												foreach($this->roles as $role) {
+													$this->renderCardLink($boss, $difficulty, $role);
+												}
+											?>
+										</td>
+										<?php
+									}
+								?>
+							</tr>
+							<?php
+						}
+					}
+				?>
 			</thead>
 		</table>
-		<?php
-	}
-	
-	private function renderInstance($instance)
-	{
-		?>
-		<div class="list-group-item">
-			<div class="list-group-item-heading" data-toggle="collapse" data-target="#<?= $instance->type->key ?>-<?= $instance->key ?>-table">
-				<h4><?= $instance->name ?></h4>
-			</div>
-			<div id="<?= $instance->type->key ?>-<?= $instance->key ?>-table" class="collapse in">
-				<?php
-					$this->renderCardLinks();
-				?>
-			</div>
-		</div>
 		<?php
 	}
 	

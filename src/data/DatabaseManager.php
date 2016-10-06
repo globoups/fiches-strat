@@ -29,6 +29,23 @@ class DatabaseManager
 		return $bosses;
 	}
 	
+    public function getCards()
+	{
+		$query = "SELECT c.*, b.key AS boss_key, d.key AS difficulty_key, r.key as role_key FROM fs_card c INNER JOIN fs_boss b ON b.id = c.boss_id INNER JOIN fs_difficulty d ON d.id = c.difficulty_id INNER JOIN fs_role r ON r.id = c.role_id";
+		$res = $this->mysqli->query($query);
+		$cards = array();
+		
+		while ($row = $res->fetch_assoc()) {
+			$card = new Card();
+			$card->bossKey = $row["boss_key"];
+			$card->difficultyKey = $row["difficulty_key"];
+			$card->roleKey = $row["role_key"];
+			$cards[] = $card;
+		}
+		
+		return $cards;
+	}
+	
     public function getDifficulties()
 	{
 		$query = "SELECT * FROM fs_difficulty";
@@ -79,6 +96,23 @@ class DatabaseManager
 		}
 		
 		return $instanceTypes;
+	}
+	
+    public function getRoles()
+	{
+		$query = "SELECT * FROM fs_role";
+		$res = $this->mysqli->query($query);
+		$roles = array();
+		
+		while ($row = $res->fetch_assoc()) {
+			$role = new Role();
+			$role->key = $row["key"];
+			$role->name = $row["name"];
+			$role->order = $row["order"];
+			$roles[] = $role;
+		}
+		
+		return $roles;
 	}
 }
 ?>

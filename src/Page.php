@@ -12,9 +12,11 @@ class Page
 			?>
 		</head>
 		<body>
-			<?php
-				$this->renderBody();
-			?>
+			<div class="container">
+				<?php
+					$this->renderBody();
+				?>
+			</div>
 		</body>
 		</html>
 		<?php
