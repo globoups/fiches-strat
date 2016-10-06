@@ -3,6 +3,8 @@ require_once("DatabaseManager.php");
 
 class ModelDataManager
 {
+	private $bosses = NULL;
+	private $difficulties = NULL;
 	private $instances = NULL;
 	private $instanceTypes = NULL;
 	private $database = NULL;
@@ -10,6 +12,15 @@ class ModelDataManager
 	public function __construct()
 	{
 		$this->database = new DatabaseManager();
+	}
+	
+    public function getDifficulties()
+	{
+		if(is_null($this->difficulties)) {
+			$this->difficulties = $this->database->getDifficulties();
+		}
+		
+		return $this->difficulties;
 	}
 	
     public function getInstances()
