@@ -19,6 +19,7 @@ class IndexPage extends Page
 		$this->instances = $this->data->getInstances();
 		$this->instanceTypes = $this->data->getInstanceTypes();
 		$this->roles = $this->data->getRoles();
+		$this->title = "Fiches strat";
 	}
 	
 	protected function renderBody()
@@ -42,7 +43,7 @@ class IndexPage extends Page
 		}
 		else {
 			?>
-				<a class="icon role-<?= $role->key ?>-32" href="<?= $card->getUrl() ?>" data-toggle="tooltip" title="<?= $card->getTooltip() ?>"></a>
+				<a class="icon role-<?= $role->key ?>-32" href="<?= $card->getUrl() ?>" data-toggle="tooltip" title="<?= $card->getTitle() ?>"></a>
 			<?php
 		}
 	}

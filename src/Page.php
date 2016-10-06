@@ -1,6 +1,8 @@
 <?php
 class Page
 {
+	protected $title = NULL;
+	
 	public function render()
 	{
 		?>
@@ -30,7 +32,7 @@ class Page
 	{
 		?>
 		<meta charset="utf-8" />
-		<title>Fiches strat</title>
+		<title><?= $this->title ?></title>
 		<link rel="icon" type="image/png" href="img/favicon.png">
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 		<!-- Default theme -->

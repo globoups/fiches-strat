@@ -7,13 +7,13 @@
     max-width: 100%;
 }
 
-.list-group-item .table,
-.panel-body .list-group,
-.panel-body .table {
+.list-group-item .table:last-child,
+.panel-body .list-group:last-child,
+.panel-body .table:last-child {
     margin-bottom: 0;
 }
 
-.role-list li:hover{
+.role-list > :hover{
     background: #E9E9E9;
     border-radius: 4px;
 }

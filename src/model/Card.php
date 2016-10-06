@@ -8,9 +8,9 @@ class Card
     public $role = NULL;
     public $roleKey = NULL;
 	
-	public function getTooltip()
+	public function getTitle()
 	{
-		return $this->boss->name." ".strtoupper($this->difficulty->key)." - ".strtoupper($this->role->key);
+		return $this->boss->name." ".strtoupper($this->difficulty->key)." - ".$this->role->name;
 	}
 	
 	public function getUrl()
