@@ -2,9 +2,10 @@
 class Bloc
 {
 	public $children = NULL;
-	public $fiche = NULL;
+	public $content = NULL;
+	public $id = NULL;
+	public $key = NULL;
 	public $order = NULL;
-	public $text = NULL;
 	public $type = NULL;
 }
 ?>

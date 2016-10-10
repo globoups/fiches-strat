@@ -5,7 +5,7 @@ require_once("Page.php");
 class IndexPage extends Page
 {
 	private $bosses = NULL;
-	private $data = NULL;
+	private $cards = NULL;
 	private $difficulties = NULL;
 	private $instances = NULL;
 	private $instanceTypes = NULL;
@@ -13,12 +13,13 @@ class IndexPage extends Page
 	
 	public function __construct()
 	{
-		$this->data = new ModelDataManager();
-		$this->bosses = $this->data->getBosses();
-		$this->difficulties = $this->data->getDifficulties();
-		$this->instances = $this->data->getInstances();
-		$this->instanceTypes = $this->data->getInstanceTypes();
-		$this->roles = $this->data->getRoles();
+		$data = new ModelDataManager();
+		$this->bosses = $data->getBosses();
+		$this->cards = $data->getCards();
+		$this->difficulties = $data->getDifficulties();
+		$this->instances = $data->getInstances();
+		$this->instanceTypes = $data->getInstanceTypes();
+		$this->roles = $data->getRoles();
 		$this->title = "Fiches strat";
 	}
 	
@@ -32,11 +33,22 @@ class IndexPage extends Page
 			}
 	}
 	
+	private function getCard($bossKey, $difficultyKey, $roleKey)
+	{
+		foreach ($this->cards as $card) {
+			if ($card->bossKey == $bossKey && $card->difficultyKey == $difficultyKey && $card->roleKey == $roleKey) {
+				return $card;
+			}
+		}
+		
+		return NULL;
+	}
+	
 	private function renderCardLink($boss, $difficulty, $role)
 	{
-		$card = $this->data->getCard($boss->key, $difficulty->key, $role->key);
+		$card = $this->getCard($boss->key, $difficulty->key, $role->key);
 		
-		if(is_null($card)) {
+		if (is_null($card)) {
 			?>
 				<span class="icon role-<?= $role->key ?>-disabled-32"></span>
 			<?php

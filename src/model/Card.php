@@ -1,10 +1,12 @@
 <?php
 class Card
 {
+    public $blocs = NULL;
     public $boss = NULL;
     public $bossKey = NULL;
     public $difficulty = NULL;
     public $difficultyKey = NULL;
+    public $id = NULL;
     public $role = NULL;
     public $roleKey = NULL;
 	

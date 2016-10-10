@@ -31,15 +31,17 @@ class CardPage extends Page
 	{
 		switch($bloc->type)
 		{
-			case "main_bloc":
+			case "main":
 				break;
-			case "sub_bloc":
+			case "sub":
 				break;
-			case "list_item":
+			case "line":
+				break;
+			case "modal":
 				break;
 			default:
 				?>
-					Unknown bloc type <?= $bloc->type ?>
+					Unknown bloc type: <?= $bloc->type ?>
 				<?php
 				break;
 		}

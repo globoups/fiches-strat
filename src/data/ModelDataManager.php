@@ -17,6 +17,26 @@ class ModelDataManager
 		$this->database = new DatabaseManager();
 	}
 	
+    public function getBoss($key)
+	{
+		$result = null;
+		
+		if (!is_null($this->bosses)) {
+			foreach ($this->bosses as $boss) {
+				if ($boss->key == $key) {
+					$result = $boss;
+				}
+			}
+		}
+		else {
+			$result = $this->database->getBoss($key);
+		}
+		
+		$result->instance = $this->getInstance($result->instanceKey);
+		
+		return $result;
+	}
+	
     public function getBosses()
 	{
 		if(is_null($this->bosses)) {
@@ -31,19 +51,26 @@ class ModelDataManager
 		return $this->bosses;
 	}
 	
-    public function getBoss($key)
+	public function getCard($bossKey, $difficultyKey, $roleKey)
 	{
-		if(is_null($this->bosses)) {
-			$this->getBosses();
-		}
+		$result = null;
 		
-		foreach ($this->bosses as $boss) {
-			if ($boss->key == $key) {
-				return $boss;
+		if (!is_null($this->cards)) {
+			foreach ($this->cards as $card) {
+				if ($card->bossKey == $bossKey && $card->difficultyKey == $difficultyKey &&$card->roleKey == $roleKey) {
+					$result = $card;
+				}
 			}
 		}
+		else {
+			$result = $this->database->getCard($bossKey, $difficultyKey, $roleKey);
+		}
 		
-		return NULL;
+		$result->boss = $this->getBoss($result->bossKey);
+		$result->difficulty = $this->getDifficulty($result->difficultyKey);
+		$result->role = $this->getRole($result->roleKey);
+		
+		return $result;
 	}
 	
     public function getCards()
@@ -61,21 +88,6 @@ class ModelDataManager
 		return $this->cards;
 	}
 	
-	public function getCard($bossKey, $difficultyKey, $roleKey)
-	{
-		if(is_null($this->cards)) {
-			$this->getCards();
-		}
-		
-		foreach ($this->cards as $card) {
-			if ($card->bossKey == $bossKey && $card->difficultyKey == $difficultyKey && $card->roleKey == $roleKey) {
-				return $card;
-			}
-		}
-		
-		return NULL;
-	}
-	
     public function getDifficulties()
 	{
 		if(is_null($this->difficulties)) {
@@ -88,32 +100,28 @@ class ModelDataManager
 	
     public function getDifficulty($key)
 	{
-		if(is_null($this->difficulties)) {
-			$this->getDifficulties();
-		}
-		
-		foreach ($this->difficulties as $difficulty) {
-			if ($difficulty->key == $key) {
-				return $difficulty;
+		if (!is_null($this->difficulties)) {
+			foreach ($this->difficulties as $difficulty) {
+				if ($difficulty->key == $key) {
+					return $difficulty;
+				}
 			}
 		}
 		
-		return NULL;
+		return $this->database->getDifficulty($key);
 	}
 	
     public function getInstance($key)
 	{
-		if(is_null($this->instances)) {
-			$this->getInstances();
-		}
-		
-		foreach ($this->instances as $instance) {
-			if ($instance->key == $key) {
-				return $instance;
+		if (!is_null($this->instances)) {
+			foreach ($this->instances as $instance) {
+				if ($instance->key == $key) {
+					return $instance;
+				}
 			}
 		}
 		
-		return NULL;
+		return $this->database->getInstance($key);
 	}
 	
     public function getInstances()
@@ -155,6 +163,19 @@ class ModelDataManager
 		return $this->instanceTypes;
 	}
 	
+    public function getRole($key)
+	{
+		if (!is_null($this->roles)) {
+			foreach ($this->roles as $role) {
+				if ($role->key == $key) {
+					return $role;
+				}
+			}
+		}
+		
+		return $this->database->getRole($key);
+	}
+	
     public function getRoles()
 	{
 		if(is_null($this->roles)) {
@@ -163,21 +184,6 @@ class ModelDataManager
 		}
 		
 		return $this->roles;
-	}
-	
-    public function getRole($key)
-	{
-		if(is_null($this->roles)) {
-			$this->getRoles();
-		}
-		
-		foreach ($this->roles as $role) {
-			if ($role->key == $key) {
-				return $role;
-			}
-		}
-		
-		return NULL;
 	}
 }
 ?>
