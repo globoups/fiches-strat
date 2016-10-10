@@ -71,6 +71,7 @@ class DatabaseManager
 		
 		while ($row = $res->fetch_assoc()) {
 			$instance = new Instance();
+			$instance->isExpanded = $row["expanded"];
 			$instance->key = $row["key"];
 			$instance->name = $row["name"];
 			$instance->order = $row["order"];

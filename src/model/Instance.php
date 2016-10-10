@@ -1,6 +1,7 @@
 <?php
 class Instance
 {
+    public $isExpanded = false;
     public $key = NULL;
     public $name = NULL;
     public $order = 0;

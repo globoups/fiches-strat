@@ -24,6 +24,16 @@ class Page
 		<?php
 	}
 	
+	protected function getCssClassCollapse($isExpanded)
+	{
+		if ($isExpanded) {
+			return "collapse in";
+		}
+		else {
+			return "collapse out";
+		}
+	}
+	
 	protected function renderBody()
 	{
 	}

@@ -55,7 +55,7 @@ class IndexPage extends Page
 			<div class="list-group-item-heading" data-toggle="collapse" data-target="#<?= $instance->type->key ?>-<?= $instance->key ?>-table">
 				<h4><?= $instance->name ?></h4>
 			</div>
-			<div id="<?= $instance->type->key ?>-<?= $instance->key ?>-table" class="collapse in">
+			<div id="<?= $instance->type->key ?>-<?= $instance->key ?>-table" class="<?= $this->getCssClassCollapse($instance->isExpanded) ?>">
 				<?php
 					$this->renderInstanceLinks($instance);
 				?>
