@@ -2,7 +2,7 @@
 require_once("data/ModelDataManager.php");
 require_once("Page.php");
 
-class CardPage extends Page
+class EditionPage extends Page
 {
     private $card = null;
     
@@ -11,24 +11,45 @@ class CardPage extends Page
         $data = new ModelDataManager();
         $this->card = $data->getCard($bossKey, $difficultyKey, $roleKey);
         
-        if(is_null($this->card)) {
-            header("Location: .");
-            die();
+        if (is_null($this->card)) {
+            $boss = $data->getBoss($bossKey);
+            $difficulty = $data->getDifficulty($difficultyKey);
+            $role = $data->getRole($roleKey);
+
+            if (is_null($boss) || is_null($difficulty) || is_null($role)) {
+                header("Location: .");
+                die();
+            }
+
+            $this->card = new Card();
+            $this->card->blocs = array();
+            $this->card->boss = $boss;
+            $this->card->difficulty = $difficulty;
+            $this->card->role = $role;
         }
         
-        $this->title = $this->card->getTitle();
+        $this->title = "Edition - ".$this->card->getTitle();
     }
     
     protected function renderBody()
     {
         ?>
         <h1><?= $this->card->boss->instance->name ?> (<?= $this->card->difficulty->name ?>)</h1>
-        <h2><?= $this->card->boss->name ?> - Fiche <?= $this->card->role->name ?> <span class="icon role-<?= $this->card->role->key ?>-32"></span></h2>
+        <h2><?= $this->card->boss->name ?> - Fiche <?= $this->card->role->name ?> <span class="icon role-<?= $this->card->role->key ?>-32"></span> - Mode &eacute;dition</h2>
         <div class="clearfix"></div>
+        <form id="edit-card-form">
+            <button class="btn btn-success">Save</button><br />
+            <br />
+            <a class="btn btn-success">Add wrapper bloc</a>
+            <a class="btn btn-success">Add info bloc</a>
+            <?php
+                foreach ($this->card->blocs as $bloc) {
+                    $this->renderBloc($bloc);
+                }
+            ?>
+            <button class="btn btn-success">Save</button>
+        </form>
         <?php
-            foreach ($this->card->blocs as $bloc) {
-                $this->renderBloc($bloc);
-            }
     }
     
     private function getRolesTooltip($roles)
@@ -74,10 +95,12 @@ class CardPage extends Page
     {
         ?>
         <div class="panel panel-default">
-            <div class="panel-heading" data-toggle="collapse" data-target="#<?= $bloc->key ?>-body">
-                <h4><?= $bloc->content ?></h4>
+            <div class="panel-heading">
+                <h4>
+                    <input type="text" value="<?= $bloc->content ?>" />
+                </h4>
             </div>
-            <div id="<?= $bloc->key ?>-body" class="collapse in">
+            <div>
                 <div class="panel-body">
                     <?php
                         if (!is_null($bloc->children)) {
@@ -89,6 +112,8 @@ class CardPage extends Page
                 </div>
             </div>
         </div>
+        <a class="btn btn-success">Add wrapper bloc</a>
+        <a class="btn btn-success">Add info bloc</a>
         <?php
     }
     
@@ -102,7 +127,9 @@ class CardPage extends Page
     private function renderInfoBloc($bloc)
     {
         ?>
-        <h4><?= $bloc->content ?></h4>
+        <h4>
+            <input type="text" value="<?= $bloc->content ?>" />
+        </h4>
         <ul class="list-group">
             <?php
                 if (!is_null($bloc->children)) {
@@ -112,6 +139,8 @@ class CardPage extends Page
                 }
             ?>
         </ul>
+        <a class="btn btn-success">Add wrapper bloc</a>
+        <a class="btn btn-success">Add info bloc</a>
         <?php
     }
     
@@ -129,7 +158,10 @@ class CardPage extends Page
         }
         
         ?>
-            <?= $this->buildContent($bloc->content) ?>
+            <textarea rows="1"><?= $bloc->content ?></textarea>
+        </li>
+        <li class="list-group-item">
+            <a class="btn btn-success">Add info line</a>
         </li>
         <?php
     }

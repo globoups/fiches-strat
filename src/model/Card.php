@@ -1,14 +1,14 @@
 <?php
 class Card
 {
-    public $blocs = NULL;
-    public $boss = NULL;
-    public $bossKey = NULL;
-    public $difficulty = NULL;
-    public $difficultyKey = NULL;
-    public $id = NULL;
-    public $role = NULL;
-    public $roleKey = NULL;
+    public $blocs = null;
+    public $boss = null;
+    public $bossKey = null;
+    public $difficulty = null;
+    public $difficultyKey = null;
+    public $id = null;
+    public $role = null;
+    public $roleKey = null;
 	
 	public function getTitle()
 	{
