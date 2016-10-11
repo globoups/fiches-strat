@@ -2,9 +2,12 @@
     cursor: pointer;
 }
 
-.modal img {
-    max-height: 100%;
-    max-width: 100%;
+.card-content {
+    padding-top: 1px;
+}
+
+.list-group-item {
+    padding: 7px 12px;
 }
 
 .list-group-item .table:last-child,
@@ -13,9 +16,17 @@
     margin-bottom: 0;
 }
 
-.role-list > :hover{
+.modal img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.panel-body > h4:first-child {
+    margin-top: 0;
+}
+
+.role-item:hover {
     background: #E9E9E9;
-    border-radius: 4px;
 }
 
 .subtitle img {

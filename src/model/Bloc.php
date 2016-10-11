@@ -1,11 +1,12 @@
 <?php
 class Bloc
 {
-	public $children = NULL;
-	public $content = NULL;
-	public $id = NULL;
-	public $key = NULL;
-	public $order = NULL;
-	public $type = NULL;
+    public $children = null;
+    public $content = null;
+    public $id = null;
+    public $key = null;
+    public $order = null;
+    public $roles = null;
+    public $type = null;
 }
 ?>

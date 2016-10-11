@@ -1,4 +1,5 @@
 <?php
+require_once("Bloc.php");
 require_once("Boss.php");
 require_once("Card.php");
 require_once("Difficulty.php");
