@@ -124,7 +124,7 @@ class EditionPage extends Page
     private function renderWrapperBloc($bloc)
     {
         ?>
-        <div class="panel panel-default">
+        <div class="wrapper-bloc panel panel-default">
             <div class="panel-heading clearfix">
                 <div class="pull-left">
                     <h4>
@@ -192,7 +192,7 @@ class EditionPage extends Page
     private function renderInfoLine($bloc)
     {
         ?>
-        <li class="list-group-item">
+        <li class="info-bloc-line list-group-item">
             <div class="pull-left">
                 <?php
                     if (!is_null($this->roles)) {
