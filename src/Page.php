@@ -1,11 +1,15 @@
 <?php
+require_once("model/User.php");
+session_start();
+
 class Page
 {
     private $wowheadUrl = "http://fr.wowhead.com/";
     
     protected $cssPaths = array();
     protected $jsPaths = array();
-    protected $title = NULL;
+    protected $title = null;
+    protected $user = null;
     
     public function __construct()
     {
@@ -20,6 +24,8 @@ class Page
         $this->jsPaths[] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
         $this->jsPaths[] = "http://wow.zamimg.com/widgets/power.js";
         $this->jsPaths[] = "js/main.js";
+
+        $this->initializeUser();
     }
     
     public function render()
@@ -77,6 +83,19 @@ class Page
         $result = preg_replace($carriageReturnPattern, $carriageReturnReplacement, $result);
         
         return $result;
+    }
+
+    private function initializeUser()
+    {
+        $this->user = new User();
+
+        if (isset($_SESSION["isUserAuthenticated"])) {
+            $this->user->isAuthenticated = $_SESSION["isUserAuthenticated"];
+        }
+
+        if (isset($_SESSION["username"])) {
+            $this->user->name = $_SESSION["username"];
+        }
     }
     
     private function renderHead()

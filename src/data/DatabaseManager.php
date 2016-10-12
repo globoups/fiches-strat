@@ -352,7 +352,8 @@ class DatabaseManager
     {
         $query = "
             SELECT *
-            FROM fs_role";
+            FROM fs_role
+            ORDER BY `order`";
         $res = $this->mysqli->query($query);
         $roles = array();
         
@@ -365,6 +366,29 @@ class DatabaseManager
         }
         
         return $roles;
+    }
+
+    public function validateCredentials($login, $pwdHash)
+    {
+        $query = "
+            SELECT COUNT(*) AS results
+            FROM fs_user
+            WHERE name = ? AND password = ?";
+        $result = false;
+        
+        if ($stmt = $this->mysqli->prepare($query)) {
+            $stmt->bind_param("ss", $login, $pwdHash);
+            $stmt->execute();
+            $res = $stmt->get_result();
+            
+            if ($row = $res->fetch_assoc()) {
+                $result = $row["results"] == 1;
+            }
+            
+            $stmt->close();
+        }
+        
+        return $result;
     }
 }
 ?>

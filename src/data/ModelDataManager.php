@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__FILE__) . "/../utils.php");
 require_once("DatabaseManager.php");
 
 class ModelDataManager
@@ -204,6 +203,14 @@ class ModelDataManager
         }
         
         return $this->roles;
+    }
+
+    public function validateCredentials($login, $password)
+    {
+        $hash = hash("sha256", $password);
+        $result = $this->database->validateCredentials($login, $hash);
+        
+        return $result;
     }
 }
 ?>

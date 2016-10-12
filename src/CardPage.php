@@ -16,7 +16,7 @@ class CardPage extends Page
             header("Location: .");
             die();
         }
-        
+
         $this->title = $this->card->getTitle();
     }
     
