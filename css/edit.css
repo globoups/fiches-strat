@@ -1,3 +1,8 @@
+textarea {
+    resize: none;
+    width: 100%;
+}
+
 .bloc-btn {
     cursor: pointer;
     font-size: 20px;
@@ -30,6 +35,10 @@
     margin-left: 10px;
 }
 
+.btn-grp {
+    margin-top: 15px;
+}
+
 .wrapper-bloc .bloc-btn-grp {
     padding-top: 10px;
 }
@@ -43,9 +52,9 @@
 }
 
 .wrapper-bloc:first-of-type > .panel-heading > .bloc-btn-grp > .bloc-btn.move-up,
-.wrapper-bloc:last-of-type > .panel-heading > .bloc-btn-grp > .bloc-btn.move-down,
+.wrapper-bloc:nth-last-of-type(2) > .panel-heading > .bloc-btn-grp > .bloc-btn.move-down,
 .info-bloc:first-of-type > div > .bloc-btn-grp > .bloc-btn.move-up,
-.info-bloc:last-of-type > div > .bloc-btn-grp > .bloc-btn.move-down,
+.info-bloc:nth-last-of-type(2) > div > .bloc-btn-grp > .bloc-btn.move-down,
 .info-bloc-line:first-of-type > .bloc-btn-grp > .bloc-btn.move-up,
 .info-bloc-line:nth-last-of-type(2) > .bloc-btn-grp > .bloc-btn.move-down {
     color: lightgray;

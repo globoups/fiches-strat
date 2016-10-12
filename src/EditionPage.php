@@ -49,12 +49,19 @@ class EditionPage extends Page
                     $this->renderBloc($bloc);
                 }
             ?>
-            <a class="btn btn-info">Add wrapper bloc</a>
-            <a class="btn btn-info">Add info bloc</a>
-            <div class="clearfix">
-                <a class="btn btn-success pull-right">Save</a>
+            <div>
+                <a class="btn btn-info add-wrapper-bloc">Add wrapper bloc</a>
+                <a class="btn btn-info add-info-bloc">Add info bloc</a>
+                <div class="clearfix">
+                    <a class="btn btn-success pull-right">Save</a>
+                </div>
             </div>
         </form>
+        <div class="empty-blocs" style="display:none">
+            <?php
+                $this->renderEmptyBlocs($bloc);
+            ?>
+        </div>
         <?php
     }
     
@@ -72,10 +79,10 @@ class EditionPage extends Page
             }
 
             if ($isRoleActive) {
-                $result .= '<span class="bloc-btn icon role-'.$role->key.'-32"></span>';
+                $result .= '<span class="bloc-btn icon role-'.$role->key.'-32"></span> ';
             }
             else {
-                $result .= '<span class="bloc-btn icon role-'.$role->key.'-disabled-32"></span>';
+                $result .= '<span class="bloc-btn icon role-'.$role->key.'-disabled-32"></span> ';
             }
         }
         
@@ -113,18 +120,71 @@ class EditionPage extends Page
     private function renderBlocButtonsGroup()
     {
         ?>
-            <div class="bloc-btn-grp pull-right">
-                <span class="bloc-btn move-up glyphicon glyphicon-arrow-up"></span>
-                <span class="bloc-btn move-down glyphicon glyphicon-arrow-down"></span>
-                <span class="bloc-btn delete glyphicon glyphicon-trash"></span>
+        <div class="bloc-btn-grp pull-right">
+            <span class="bloc-btn move-up glyphicon glyphicon-arrow-up"></span>
+            <span class="bloc-btn move-down glyphicon glyphicon-arrow-down"></span>
+            <span class="bloc-btn delete glyphicon glyphicon-trash"></span>
+        </div>
+        <?php
+    }
+
+    private function renderEmptyBlocs()
+    {
+        ?>
+        <div class="panel panel-default wrapper-bloc">
+            <div class="panel-heading clearfix">
+                <div class="pull-left">
+                    <h4>
+                        <input type="text" value="">
+                    </h4>
+                </div>
+                <?php
+                    $this->renderBlocButtonsGroup();
+                ?>
             </div>
+            <div>
+                <div class="panel-body">
+                    <div class="btn-grp">
+                        <a class="btn btn-info add-info-bloc">Add info bloc</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="info-bloc">
+            <div class="clearfix">
+                <div class="pull-left">
+                    <h4>
+                        <input type="text" value="">
+                    </h4>
+                </div>
+                <?php
+                    $this->renderBlocButtonsGroup();
+                ?>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a class="btn btn-info add-info-bloc-line">Add info line</a>
+                </li>
+            </ul>
+        </div>
+        <li class="list-group-item info-bloc-line">
+            <div class="pull-left">
+                <span class="bloc-btn icon role-tank-disabled-32"></span>
+                <span class="bloc-btn icon role-heal-disabled-32"></span>
+                <span class="bloc-btn icon role-dps-disabled-32"></span>
+            </div>
+            <?php
+                $this->renderBlocButtonsGroup();
+            ?>
+            <textarea rows="1"></textarea>
+        </li>
         <?php
     }
     
     private function renderWrapperBloc($bloc)
     {
         ?>
-        <div class="wrapper-bloc panel panel-default">
+        <div class="panel panel-default wrapper-bloc">
             <div class="panel-heading clearfix">
                 <div class="pull-left">
                     <h4>
@@ -144,8 +204,9 @@ class EditionPage extends Page
                             }
                         }
                     ?>
-                    <ul class="list-group"></ul>
-                    <a class="btn btn-info">Add info bloc</a>
+                    <div class="btn-grp">
+                        <a class="btn btn-info add-info-bloc">Add info bloc</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -182,7 +243,7 @@ class EditionPage extends Page
                     }
                 ?>
                 <li class="list-group-item">
-                    <a class="btn btn-info">Add info line</a>
+                    <a class="btn btn-info add-info-bloc-line">Add info line</a>
                 </li>
             </ul>
         </div>
@@ -192,7 +253,7 @@ class EditionPage extends Page
     private function renderInfoLine($bloc)
     {
         ?>
-        <li class="info-bloc-line list-group-item">
+        <li class="list-group-item info-bloc-line">
             <div class="pull-left">
                 <?php
                     if (!is_null($this->roles)) {
