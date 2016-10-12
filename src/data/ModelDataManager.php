@@ -3,13 +3,13 @@ require_once("DatabaseManager.php");
 
 class ModelDataManager
 {
-    private $bosses = NULL;
-    private $cards = NULL;
-    private $database = NULL;
-    private $difficulties = NULL;
-    private $instances = NULL;
-    private $instanceTypes = NULL;
-    private $roles = NULL;
+    private $bosses = null;
+    private $cards = null;
+    private $database = null;
+    private $difficulties = null;
+    private $instances = null;
+    private $instanceTypes = null;
+    private $roles = null;
     
     public function __construct()
     {

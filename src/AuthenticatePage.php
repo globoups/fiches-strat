@@ -5,6 +5,7 @@ require_once("Page.php");
 class AuthenticatePage extends Page
 {
     private $authenticationSuccess = null;
+    private $username = "";
 
 	public function __construct()
 	{
@@ -15,7 +16,7 @@ class AuthenticatePage extends Page
     public function authenticate($username, $password)
     {
         $data = new ModelDataManager();
-        $this->user->name = $username;
+        $this->username = $username;
         $this->authenticationSuccess = $data->validateCredentials($username, $password);
 
         if ($this->authenticationSuccess) {
@@ -69,7 +70,7 @@ class AuthenticatePage extends Page
             ?>
             <div class="form-group">
                 <label for="auth-username">Nom d'utilisateur</label>
-                <input id="auth-username" name="auth-username" type="text" class="form-control" placeholder="Nom d'utilisateur" value="<?= $this->user->name ?>">
+                <input id="auth-username" name="auth-username" type="text" class="form-control" placeholder="Nom d'utilisateur" value="<?= $this->username ?>">
             </div>
             <div class="form-group">
                 <label for="auth-password">Mot de passe</label>

@@ -10,6 +10,12 @@ class EditionPage extends Page
     public function __construct($bossKey, $difficultyKey, $roleKey)
     {
         parent::__construct();
+
+        if (!$this->user->isAuthenticated) {
+	        header("Location: ./authenticate.php");
+	        die();
+        }
+
         $this->cssPaths[] = "css/edit.css";
         $this->jsPaths[] = "js/edit.js";
 
