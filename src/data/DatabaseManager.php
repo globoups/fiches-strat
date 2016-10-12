@@ -134,7 +134,8 @@ class DatabaseManager
         $query = "
             SELECT b.*, i.key AS instance_key
             FROM fs_boss b
-            INNER JOIN fs_instance i ON i.id = b.instance_id";
+            INNER JOIN fs_instance i ON i.id = b.instance_id
+            ORDER BY b.order";
         $res = $this->mysqli->query($query);
         $bosses = array();
         
@@ -207,7 +208,8 @@ class DatabaseManager
     {
         $query = "
             SELECT *
-            FROM fs_difficulty";
+            FROM fs_difficulty
+            ORDER BY `order`";
         $res = $this->mysqli->query($query);
         $difficulties = array();
         
@@ -282,7 +284,8 @@ class DatabaseManager
         $query = "
             SELECT i.*, it.key AS instance_type_key
             FROM fs_instance i
-            INNER JOIN fs_instance_type it ON it.id = i.instance_type_id";
+            INNER JOIN fs_instance_type it ON it.id = i.instance_type_id
+            ORDER BY i.order";
         $res = $this->mysqli->query($query);
         $instances = array();
         
@@ -303,7 +306,8 @@ class DatabaseManager
     {
         $query = "
             SELECT *
-            FROM fs_instance_type";
+            FROM fs_instance_type
+            ORDER BY `order`";
         $res = $this->mysqli->query($query);
         $instanceTypes = array();
         

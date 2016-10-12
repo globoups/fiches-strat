@@ -3,7 +3,24 @@ class Page
 {
     private $wowheadUrl = "http://fr.wowhead.com/";
     
+    protected $cssPaths = array();
+    protected $jsPaths = array();
     protected $title = NULL;
+    
+    public function __construct()
+    {
+        $this->cssPaths[] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+        // Default theme
+        $this->cssPaths[] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css";
+        // Slate theme
+        //$this->cssPaths[] = "https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/slate/bootstrap.min.css";
+        $this->cssPaths[] = "css/main.css";
+        $this->cssPaths[] = "css/icon.css";
+        $this->jsPaths[] = "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js";
+        $this->jsPaths[] = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
+        $this->jsPaths[] = "http://wow.zamimg.com/widgets/power.js";
+        $this->jsPaths[] = "js/main.js";
+    }
     
     public function render()
     {
@@ -68,18 +85,19 @@ class Page
         <meta charset="utf-8" />
         <title><?= $this->title ?></title>
         <link rel="icon" type="image/png" href="img/favicon.png">
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-        <!-- Default theme -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet" />
-        <!-- Slate theme
-        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/slate/bootstrap.min.css" rel="stylesheet" /> -->
-        <link href="css/main.css" rel="stylesheet" />
-        <link href="css/icon.css" rel="stylesheet" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="http://wow.zamimg.com/widgets/power.js"></script>
-        <script src="js/main.js"></script>
         <?php
+            foreach ($this->cssPaths as $cssPath) {
+                ?>
+                    <link href="<?= $cssPath ?>" rel="stylesheet" />
+                <?php
+            }
+        ?>
+        <?php
+            foreach ($this->jsPaths as $jsPath) {
+                ?>
+                    <script src="<?= $jsPath ?>"></script>
+                <?php
+            }
     }
 }
 ?>

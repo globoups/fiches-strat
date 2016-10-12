@@ -1,0 +1,43 @@
+.bloc-btn {
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.bloc-btn:hover {
+    text-shadow: 0 0 3px;
+}
+
+.bloc-btn.delete {
+    color: tomato;
+}
+
+.bloc-btn.delete:active {
+    color: red;
+}
+
+.bloc-btn.move-down,
+.bloc-btn.move-up {
+    color: dimgrey;
+}
+
+.bloc-btn.move-down:active,
+.bloc-btn.move-up:active {
+    color: inherit;
+}
+
+.bloc-btn-grp .bloc-btn {
+    margin-left: 10px;
+}
+
+.info-bloc .bloc-btn-grp {
+    padding-top: 14px;
+}
+
+.list-group-item .bloc-btn-grp {
+    padding-top: 4px;
+}
+
+.panel-heading .bloc-btn-grp {
+    padding-top: 10px;
+}

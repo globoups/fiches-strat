@@ -65,7 +65,6 @@ class ModelDataManager
     {
         if(is_null($this->bosses)) {
             $this->bosses = $this->database->getBosses();
-            usort($this->bosses, "cmp");
         
             foreach ($this->bosses as $boss) {
                 $boss->instance = $this->getInstance($boss->instanceKey);
@@ -117,7 +116,6 @@ class ModelDataManager
     {
         if(is_null($this->difficulties)) {
             $this->difficulties = $this->database->getDifficulties();
-            usort($this->difficulties, "cmp");
         }
         
         return $this->difficulties;
@@ -153,7 +151,6 @@ class ModelDataManager
     {
         if(is_null($this->instances)) {
             $this->instances = $this->database->getInstances();
-            usort($this->instances, "cmp");
         
             foreach ($this->instances as $instance) {
                 $instance->type = $this->getInstanceType($instance->typeKey);
@@ -182,7 +179,6 @@ class ModelDataManager
     {
         if(is_null($this->instanceTypes)) {
             $this->instanceTypes = $this->database->getInstanceTypes();
-            usort($this->instanceTypes, "cmp");
         }
         
         return $this->instanceTypes;
@@ -205,7 +201,6 @@ class ModelDataManager
     {
         if(is_null($this->roles)) {
             $this->roles = $this->database->getRoles();
-            usort($this->roles, "cmp");
         }
         
         return $this->roles;

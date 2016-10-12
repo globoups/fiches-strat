@@ -13,6 +13,7 @@ class IndexPage extends Page
 	
 	public function __construct()
 	{
+        parent::__construct();
 		$data = new ModelDataManager();
 		$this->bosses = $data->getBosses();
 		$this->cards = $data->getCards();

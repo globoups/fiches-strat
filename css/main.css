@@ -49,8 +49,3 @@ textarea {
     white-space: nowrap;
     width: 1%;
 }
-
-#edit-card-form .list-group,
-#edit-card-form .panel {
-    border: 1px dashed black;
-}

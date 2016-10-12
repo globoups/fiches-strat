@@ -8,6 +8,7 @@ class CardPage extends Page
     
     public function __construct($bossKey, $difficultyKey, $roleKey)
     {
+        parent::__construct();
         $data = new ModelDataManager();
         $this->card = $data->getCard($bossKey, $difficultyKey, $roleKey);
         
