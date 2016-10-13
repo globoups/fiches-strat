@@ -24,7 +24,10 @@ function buildBloc(element) {
 
 function buildCard() {
     var card = {
-        blocs: []
+        blocs: [],
+        boss_key: $("input[name=boss]").val(),
+        difficulty_key: $("input[name=difficulty]").val(),
+        role_key: $("input[name=role]").val()
     };
     var order = 0;
 
@@ -238,8 +241,9 @@ $(function () {
         var data = JSON.stringify(card);
 
         $.ajax({
-            url: "",
+            url: "./svc/editcard.php",
             method: "POST",
+            contentType: "application/json;charset=utf-8",
             dataType: "json",
             data: data
         })

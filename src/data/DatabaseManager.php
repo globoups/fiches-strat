@@ -11,6 +11,38 @@ class DatabaseManager
         $this->mysqli = new mysqli($GLOBALS["dbHost"], $GLOBALS["dbUser"], $GLOBALS["dbPassword"], $GLOBALS["dbName"]);
         $this->mysqli->set_charset($GLOBALS["dbCharset"]);
     }
+
+    public function createCard($card, $user)
+    {
+        $boss = $this->getBoss($card->boss_key);
+        $difficulty = $this->getDifficulty($card->difficulty_key);
+        $role = $this->getRole($card->role_key);
+        $nextVersion = $this->getCardNextVersion($card->boss_key, $card->difficulty_key, $card->role_key);
+        $user = $this->getUser($user->name);
+
+        if (!is_null($boss) && !is_null($difficulty) && !is_null($role) && !is_null($user)) {
+            $query = "
+                INSERT INTO fs_card (boss_id, difficulty_id, role_id, version, user_id)
+                VALUES (?, ?, ?, ?, ?)";
+            $cardId = null;
+        
+            if ($stmt = $this->mysqli->prepare($query)) {
+                $stmt->bind_param("iiiii", $boss->id, $difficulty->id, $role->id, $nextVersion, $user->id);
+
+                if (!$stmt->execute()) {
+                    echo '{"error":"'.$this->mysqli->error.'"}';
+                }
+
+                $stmt->execute();
+                $cardId = $stmt->insert_id;
+                $stmt->close();
+            }
+
+            return $cardId;
+        }
+
+        return null;
+    }
     
     public function getBlocRoles($blocId)
     {
@@ -118,6 +150,7 @@ class DatabaseManager
             
             if ($row = $res->fetch_assoc()) {
                 $boss = new Boss();
+                $boss->id = $row["id"];
                 $boss->key = $row["key"];
                 $boss->name = $row["name"];
                 $boss->order = $row["order"];
@@ -184,6 +217,32 @@ class DatabaseManager
         return $card;
     }
     
+    public function getCardNextVersion($bossKey, $difficultyKey, $roleKey)
+    {
+        $query = "
+            SELECT MAX(c.version) AS last_version
+            FROM fs_card c
+            INNER JOIN fs_boss b ON b.id = c.boss_id
+            INNER JOIN fs_difficulty d ON d.id = c.difficulty_id
+            INNER JOIN fs_role r ON r.id = c.role_id
+            WHERE b.key = ? AND d.key = ? AND r.key = ?";
+        $nextVersion = 1;
+        
+        if ($stmt = $this->mysqli->prepare($query)) {
+            $stmt->bind_param("sss", $bossKey, $difficultyKey, $roleKey);
+            $stmt->execute();
+            $res = $stmt->get_result();
+            
+            if ($row = $res->fetch_assoc()) {
+                $nextVersion = $row["last_version"] + 1;
+            }
+            
+            $stmt->close();
+        }
+        
+        return $nextVersion;
+    }
+    
     public function getCards()
     {
         $query = "
@@ -244,6 +303,7 @@ class DatabaseManager
             
             if ($row = $res->fetch_assoc()) {
                 $difficulty = new Difficulty();
+                $difficulty->id = $row["id"];
                 $difficulty->key = $row["key"];
                 $difficulty->name = $row["name"];
                 $difficulty->order = $row["order"];
@@ -342,6 +402,7 @@ class DatabaseManager
             
             if ($row = $res->fetch_assoc()) {
                 $role = new Role();
+                $role->id = $row["id"];
                 $role->key = $row["key"];
                 $role->name = $row["name"];
                 $role->order = $row["order"];
@@ -351,6 +412,31 @@ class DatabaseManager
         }
         
         return $role;
+    }
+    
+    public function getUser($name)
+    {
+        $query = "
+            SELECT *
+            FROM fs_user
+            WHERE `name` = ?";
+        $user = null;
+        
+        if ($stmt = $this->mysqli->prepare($query)) {
+            $stmt->bind_param("s", $name);
+            $stmt->execute();
+            $res = $stmt->get_result();
+            
+            if ($row = $res->fetch_assoc()) {
+                $user = new User();
+                $user->id = $row["id"];
+                $user->name = $row["name"];
+            }
+            
+            $stmt->close();
+        }
+        
+        return $user;
     }
     
     public function getRoles()

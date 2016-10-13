@@ -49,6 +49,9 @@ class EditionPage extends Page
         <h1><?= $this->card->boss->instance->name ?> (<?= $this->card->difficulty->name ?>)</h1>
         <h2><?= $this->card->boss->name ?> - Fiche <?= $this->card->role->name ?> <span class="icon role-<?= $this->card->role->key ?>-32"></span> - Mode &eacute;dition</h2>
         <div class="clearfix"></div>
+        <input name="boss" type="hidden" value="<?= $this->card->boss->key ?>" />
+        <input name="difficulty" type="hidden" value="<?= $this->card->difficulty->key ?>" />
+        <input name="role" type="hidden" value="<?= $this->card->role->key ?>" />
         <div id="card-content">
             <?php
                 foreach ($this->card->blocs as $bloc) {

@@ -15,6 +15,11 @@ class ModelDataManager
     {
         $this->database = new DatabaseManager();
     }
+
+    public function createCard($card, $user)
+    {
+        $this->database->createCard($card, $user);
+    }
     
     public function getBlocsByCardId($cardId)
     {
@@ -203,6 +208,12 @@ class ModelDataManager
         }
         
         return $this->roles;
+    }
+
+    public function updateCard($card, $user)
+    {
+        $this->createCard($card, $user);
+        //echo '{"test":"'.$card->id.'"}';
     }
 
     public function validateCredentials($login, $password)
