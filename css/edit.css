@@ -39,6 +39,10 @@ textarea {
     margin-top: 15px;
 }
 
+.info-bloc {
+    border-radius: 4px;
+}
+
 .wrapper-bloc .bloc-btn-grp {
     padding-top: 10px;
 }
@@ -49,6 +53,10 @@ textarea {
 
 .info-bloc-line .bloc-btn-grp {
     padding-top: 4px;
+}
+
+.toggle-role {
+    cursor: pointer;
 }
 
 .wrapper-bloc:first-of-type > .panel-heading > .bloc-btn-grp > .bloc-btn.move-up,

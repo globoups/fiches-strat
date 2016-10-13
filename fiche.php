@@ -1,10 +1,10 @@
 <?php
-if(!(isset($_GET["boss"]) && isset($_GET["difficulty"]) && isset($_GET["role"]))) {
+if (!(isset($_GET["boss"]) && isset($_GET["difficulty"]) && isset($_GET["role"]))) {
 	header("Location: .");
 	die();
 }
 
-require_once("src/CardPage.php");
+require_once("src/page/CardPage.php");
 
 $bossKey = $_GET["boss"];
 $difficultyKey = $_GET["difficulty"];

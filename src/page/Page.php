@@ -1,6 +1,6 @@
 <?php
-require_once("model/User.php");
-session_start();
+require_once(dirname(__FILE__) . "/../session.php");
+require_once(dirname(__FILE__) . "/../model/User.php");
 
 class Page
 {

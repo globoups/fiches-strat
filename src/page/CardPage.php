@@ -1,5 +1,5 @@
 <?php
-require_once("data/ModelDataManager.php");
+require_once(dirname(__FILE__) . "/../data/ModelDataManager.php");
 require_once("Page.php");
 
 class CardPage extends Page

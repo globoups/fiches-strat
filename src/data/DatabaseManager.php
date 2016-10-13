@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__) . "/../config.php");
 require_once(dirname(__FILE__) . "/../model/models.php");
 
 class DatabaseManager
@@ -7,8 +8,8 @@ class DatabaseManager
     
     public function __construct()
     {
-        $this->mysqli = new mysqli("localhost:3306", "root", "", "fiches");
-        $this->mysqli->set_charset("utf8");
+        $this->mysqli = new mysqli($GLOBALS["dbHost"], $GLOBALS["dbUser"], $GLOBALS["dbPassword"], $GLOBALS["dbName"]);
+        $this->mysqli->set_charset($GLOBALS["dbCharset"]);
     }
     
     public function getBlocRoles($blocId)

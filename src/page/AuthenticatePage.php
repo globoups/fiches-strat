@@ -1,5 +1,5 @@
 <?php
-require_once("data/ModelDataManager.php");
+require_once(dirname(__FILE__) . "/../data/ModelDataManager.php");
 require_once("Page.php");
 
 class AuthenticatePage extends Page
@@ -95,7 +95,7 @@ class AuthenticatePage extends Page
 		?>
         <form action="." method="post">
             <div class="alert alert-success">
-                Bienvenue <strong><?= $this->user->name ?></strong>.
+                Bienvenue <strong><?= $this->username ?></strong>.
             </div>
             <button type="submit" class="btn btn-default pull-right">Retour</button>
         </form>

@@ -1,4 +1,9 @@
 var blocTypes = [".info-bloc-line", ".info-bloc", ".wrapper-bloc"];
+var roles = ["tank", "heal", "dps"];
+
+function buildCard() {
+
+}
 
 function getNextBloc(bloc) {
     var blocType;
@@ -40,6 +45,18 @@ function getPreviousBloc(bloc) {
     } while (previousBloc.length == 0 && i < blocTypes.length)
 
     return previousBloc;
+}
+
+function getRole(element) {
+    var result;
+
+    for (i = 0; i < roles.length; i++) {
+        if (element.hasClass(roles[i])) {
+            result = (roles[i]);
+        }
+    }
+
+    return result;
 }
 
 $(function () {
@@ -99,5 +116,12 @@ $(function () {
             currentBloc.detach();
             previousBloc.before(currentBloc);
         }
+    });
+
+    $(".toggle-role").click(function () {
+        var role = getRole($(this));
+
+        $(this).toggleClass("enabled disabled");
+        $(this).toggleClass("role-" + role + "-32 role-" + role + "-disabled-32");
     });
 });

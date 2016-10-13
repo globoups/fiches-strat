@@ -1,5 +1,5 @@
 <?php
-require_once("data/ModelDataManager.php");
+require_once(dirname(__FILE__) . "/../data/ModelDataManager.php");
 require_once("Page.php");
 
 class EditionPage extends Page
@@ -85,10 +85,10 @@ class EditionPage extends Page
             }
 
             if ($isRoleActive) {
-                $result .= '<span class="bloc-btn icon role-'.$role->key.'-32"></span> ';
+                $result .= '<span class="toggle-role '.$role->key.' enabled icon role-'.$role->key.'-32"></span> ';
             }
             else {
-                $result .= '<span class="bloc-btn icon role-'.$role->key.'-disabled-32"></span> ';
+                $result .= '<span class="toggle-role '.$role->key.' disabled icon role-'.$role->key.'-disabled-32"></span> ';
             }
         }
         
