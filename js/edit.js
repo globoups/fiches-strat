@@ -1,8 +1,120 @@
 var blocTypes = [".info-bloc-line", ".info-bloc", ".wrapper-bloc"];
 var roles = ["tank", "heal", "dps"];
 
-function buildCard() {
+function buildBloc(element) {
+    var blocType = getBlocType(element);
+    var bloc;
 
+    switch (blocType) {
+        case 1:
+            bloc = buildWrapperBloc(element);
+            break;
+        case 2:
+            bloc = buildInfoBloc(element);
+            break;
+        case 3:
+            bloc = buildInfoBlocLine(element);
+            break;
+        default:
+            break;
+    }
+
+    return bloc;
+}
+
+function buildCard() {
+    var card = {
+        blocs: []
+    };
+    var order = 0;
+
+    $("#card-content").children(".info-bloc, .wrapper-bloc").each(function () {
+        var bloc = buildBloc($(this));
+        bloc.order = ++order;
+        card.blocs.push(bloc);
+    });
+
+    return card;
+}
+
+function buildInfoBloc(element) {
+    var children = [];
+    var order = 0;
+
+    element.children(".list-group").first().children(".info-bloc-line").each(function () {
+        var child = buildInfoBlocLine($(this));
+        child.order = ++order;
+        children.push(child);
+    });
+
+    var bloc = {
+        children: children,
+        content: element.find("input[type=text]").first().val(),
+        order: 0,
+        roles: null,
+        type: 2
+    };
+
+    return bloc;
+}
+
+function buildInfoBlocLine(element) {
+    var roles = [];
+
+    element.find(".toggle-role").each(function () {
+        var role = getRole($(this));
+
+        if ($(this).hasClass("enabled")) {
+            roles.push(role);
+        }
+    });
+
+    var bloc = {
+        children: null,
+        content: element.find("textarea").first().val(),
+        order: 0,
+        roles: roles,
+        type: 3
+    };
+
+    return bloc;
+}
+
+function buildWrapperBloc(element) {
+    var children = [];
+    var order = 0;
+
+    element.find(".panel-body").first().children(".info-bloc").each(function () {
+        var child = buildInfoBloc($(this));
+        child.order = ++order;
+        children.push(child);
+    });
+
+    var bloc = {
+        children: children,
+        content: element.find("input[type=text]").first().val(),
+        order: 0,
+        roles: null,
+        type: 1
+    };
+
+    return bloc;
+}
+
+function getBlocType(element) {
+    var result;
+
+    if (element.hasClass("wrapper-bloc")) {
+        result = 1;
+    }
+    else if (element.hasClass("info-bloc")) {
+        result = 2;
+    }
+    else if (element.hasClass("info-bloc-line")) {
+        result = 3;
+    }
+
+    return result;
 }
 
 function getNextBloc(bloc) {
@@ -116,6 +228,30 @@ $(function () {
             currentBloc.detach();
             previousBloc.before(currentBloc);
         }
+    });
+
+    $(".save").click(function () {
+        var btn = $(this);
+        btn.addClass("disabled");
+
+        var card = buildCard();
+        var data = JSON.stringify(card);
+
+        $.ajax({
+            url: "",
+            method: "POST",
+            dataType: "json",
+            data: data
+        })
+        .done(function (result) {
+            alert(result);
+        })
+        .fail(function () {
+            alert("failed");
+        })
+        .always(function () {
+            btn.removeClass("disabled");
+        });
     });
 
     $(".toggle-role").click(function () {

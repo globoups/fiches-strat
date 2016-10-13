@@ -160,7 +160,9 @@ class DatabaseManager
             INNER JOIN fs_boss b ON b.id = c.boss_id
             INNER JOIN fs_difficulty d ON d.id = c.difficulty_id
             INNER JOIN fs_role r ON r.id = c.role_id
-            WHERE b.key = ? AND d.key = ? AND r.key = ?";
+            WHERE b.key = ? AND d.key = ? AND r.key = ? AND c.deleted = 0
+            ORDER BY c.version DESC
+            LIMIT 0, 1";
         $card = null;
         
         if ($stmt = $this->mysqli->prepare($query)) {
@@ -189,7 +191,9 @@ class DatabaseManager
             FROM fs_card c
             INNER JOIN fs_boss b ON b.id = c.boss_id
             INNER JOIN fs_difficulty d ON d.id = c.difficulty_id
-            INNER JOIN fs_role r ON r.id = c.role_id";
+            INNER JOIN fs_role r ON r.id = c.role_id
+            WHERE c.deleted = 0
+            GROUP BY c.boss_id, c.difficulty_id, c.role_id";
         $res = $this->mysqli->query($query);
         $cards = array();
         

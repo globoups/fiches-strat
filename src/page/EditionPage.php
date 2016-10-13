@@ -49,7 +49,7 @@ class EditionPage extends Page
         <h1><?= $this->card->boss->instance->name ?> (<?= $this->card->difficulty->name ?>)</h1>
         <h2><?= $this->card->boss->name ?> - Fiche <?= $this->card->role->name ?> <span class="icon role-<?= $this->card->role->key ?>-32"></span> - Mode &eacute;dition</h2>
         <div class="clearfix"></div>
-        <form id="edit-card-form">
+        <div id="card-content">
             <?php
                 foreach ($this->card->blocs as $bloc) {
                     $this->renderBloc($bloc);
@@ -58,11 +58,11 @@ class EditionPage extends Page
             <div>
                 <a class="btn btn-info add-wrapper-bloc">Add wrapper bloc</a>
                 <a class="btn btn-info add-info-bloc">Add info bloc</a>
-                <div class="clearfix">
-                    <a class="btn btn-success pull-right">Save</a>
-                </div>
             </div>
-        </form>
+        </div>
+        <div class="clearfix">
+            <a class="btn btn-success pull-right save">Save</a>
+        </div>
         <div class="empty-blocs" style="display:none">
             <?php
                 $this->renderEmptyBlocs($bloc);
@@ -175,9 +175,9 @@ class EditionPage extends Page
         </div>
         <li class="list-group-item info-bloc-line">
             <div class="pull-left">
-                <span class="bloc-btn icon role-tank-disabled-32"></span>
-                <span class="bloc-btn icon role-heal-disabled-32"></span>
-                <span class="bloc-btn icon role-dps-disabled-32"></span>
+                <span class="toggle-role tank disabled icon role-tank-disabled-32"></span>
+                <span class="toggle-role heal disabled icon role-heal-disabled-32"></span>
+                <span class="toggle-role dps disabled icon role-dps-disabled-32"></span>
             </div>
             <?php
                 $this->renderBlocButtonsGroup();
