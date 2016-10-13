@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2016 at 03:41 PM
+-- Generation Time: Oct 13, 2016 at 03:57 PM
 -- Server version: 5.7.11
 -- PHP Version: 5.6.19
 
@@ -121,19 +121,24 @@ CREATE TABLE `fs_card` (
   `id` int(11) NOT NULL,
   `boss_id` int(11) NOT NULL,
   `difficulty_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL
+  `role_id` int(11) NOT NULL,
+  `version` int(11) NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `fs_card`
 --
 
-INSERT INTO `fs_card` (`id`, `boss_id`, `difficulty_id`, `role_id`) VALUES
-(1, 2, 3, 2),
-(2, 2, 3, 3),
-(3, 6, 1, 1),
-(4, 6, 1, 2),
-(5, 6, 1, 3);
+INSERT INTO `fs_card` (`id`, `boss_id`, `difficulty_id`, `role_id`, `version`, `deleted`, `user_id`) VALUES
+(1, 2, 3, 2, 1, 0, 1),
+(2, 2, 3, 3, 1, 0, 1),
+(3, 6, 1, 1, 1, 0, 1),
+(4, 6, 1, 2, 1, 0, 1),
+(5, 6, 1, 3, 1, 0, 1),
+(6, 2, 3, 2, 2, 1, 1),
+(7, 6, 1, 1, 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -283,9 +288,7 @@ ALTER TABLE `fs_boss`
 --
 ALTER TABLE `fs_card`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `boss_id` (`boss_id`,`difficulty_id`,`role_id`),
-  ADD KEY `difficulty_id` (`difficulty_id`),
-  ADD KEY `role_id` (`role_id`);
+  ADD UNIQUE KEY `version` (`boss_id`,`difficulty_id`,`role_id`,`version`) USING BTREE;
 
 --
 -- Indexes for table `fs_difficulty`
@@ -337,7 +340,7 @@ ALTER TABLE `fs_boss`
 -- AUTO_INCREMENT for table `fs_card`
 --
 ALTER TABLE `fs_card`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `fs_difficulty`
 --
