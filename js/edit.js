@@ -236,6 +236,7 @@ $(function () {
     $(".save").click(function () {
         var btn = $(this);
         btn.addClass("disabled");
+        $("#modalSaving").modal();
 
         var card = buildCard();
         var data = JSON.stringify(card);
@@ -248,12 +249,21 @@ $(function () {
             data: data
         })
         .done(function (result) {
-            alert(result);
+            if (result.status == "success") {
+                $("#modalSaveSuccess").modal();
+            }
+            else if (result.status == "error" && result.errorCode == 2) {
+                $("#modalSaveFailNotAuthenticated").modal();
+            }
+            else {
+                $("#modalSaveFail").modal();
+            }
         })
         .fail(function () {
-            alert("failed");
+            $("#modalSaveFail").modal();
         })
         .always(function () {
+            $("#modalSaving").modal("hide");
             btn.removeClass("disabled");
         });
     });

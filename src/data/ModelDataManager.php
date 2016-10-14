@@ -18,7 +18,54 @@ class ModelDataManager
 
     public function createCard($card, $user)
     {
-        $this->database->createCard($card, $user);
+        $card->id = $this->database->createCard($card, $user);
+
+        if (is_null($card->id)) {
+            $this->logError("createCard failed.\n".var_export($card, true)."\n".var_export($user, true));
+            return false;
+        }
+
+        return true;
+    }
+
+    public function createChildBloc($bloc, $parentBloc)
+    {
+        $bloc->id = $this->database->createChildBloc($bloc, $parentBloc->id);
+
+        if (is_null($bloc->id)) {
+            $this->logError("createChildBloc failed.\n".serialize($bloc)."\n".serialize($parentBloc));
+            return false;
+        }
+
+        if (!is_null($bloc->children)) {
+            foreach ($bloc->children as $childBloc) {
+                if (!$this->createChildBloc($childBloc, $bloc)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function createRootBloc($bloc, $card)
+    {
+        $bloc->id = $this->database->createRootBloc($bloc, $card->id);
+
+        if (is_null($bloc->id)) {
+            $this->logError("createRootBloc failed.\n".serialize($bloc)."\n".serialize($card));
+            return false;
+        }
+
+        if (!is_null($bloc->children)) {
+            foreach ($bloc->children as $childBloc) {
+                if (!$this->createChildBloc($childBloc, $bloc)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
     
     public function getBlocsByCardId($cardId)
@@ -212,8 +259,17 @@ class ModelDataManager
 
     public function updateCard($card, $user)
     {
-        $this->createCard($card, $user);
-        //echo '{"test":"'.$card->id.'"}';
+        if (!$this->createCard($card, $user)) {
+            return false;
+        }
+
+        foreach ($card->blocs as $bloc) {
+            if (!$this->createRootBloc($bloc, $card)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function validateCredentials($login, $password)
@@ -222,6 +278,11 @@ class ModelDataManager
         $result = $this->database->validateCredentials($login, $hash);
         
         return $result;
+    }
+
+    private function logError($message)
+    {
+        return !is_null($this->database->log(3, $message));
     }
 }
 ?>

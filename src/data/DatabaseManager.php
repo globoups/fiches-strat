@@ -19,29 +19,66 @@ class DatabaseManager
         $role = $this->getRole($card->role_key);
         $nextVersion = $this->getCardNextVersion($card->boss_key, $card->difficulty_key, $card->role_key);
         $user = $this->getUser($user->name);
+        
+        $cardId = null;
 
         if (!is_null($boss) && !is_null($difficulty) && !is_null($role) && !is_null($user)) {
             $query = "
                 INSERT INTO fs_card (boss_id, difficulty_id, role_id, version, user_id)
                 VALUES (?, ?, ?, ?, ?)";
-            $cardId = null;
         
             if ($stmt = $this->mysqli->prepare($query)) {
                 $stmt->bind_param("iiiii", $boss->id, $difficulty->id, $role->id, $nextVersion, $user->id);
 
-                if (!$stmt->execute()) {
-                    echo '{"error":"'.$this->mysqli->error.'"}';
+                if ($stmt->execute()) {
+                    $cardId = $stmt->insert_id;
                 }
 
-                $stmt->execute();
-                $cardId = $stmt->insert_id;
                 $stmt->close();
             }
-
-            return $cardId;
         }
 
-        return null;
+        return $cardId;
+    }
+
+    public function createChildBloc($bloc, $parentId)
+    {
+        $query = "
+            INSERT INTO fs_bloc (type, content, `order`, parent_id)
+            VALUE (?, ?, ?, ?)";
+        $blocId = null;
+        
+        if ($stmt = $this->mysqli->prepare($query)) {
+            $stmt->bind_param("ssii", $bloc->type, $bloc->content, $bloc->order, $parentId);
+
+            if ($stmt->execute()) {
+                $blocId = $stmt->insert_id;
+            }
+
+            $stmt->close();
+        }
+
+        return $blocId;
+    }
+
+    public function createRootBloc($bloc, $cardId)
+    {
+        $query = "
+            INSERT INTO fs_bloc (type, content, `order`, card_id)
+            VALUE (?, ?, ?, ?)";
+        $blocId = null;
+        
+        if ($stmt = $this->mysqli->prepare($query)) {
+            $stmt->bind_param("ssii", $bloc->type, $bloc->content, $bloc->order, $cardId);
+
+            if ($stmt->execute()) {
+                $blocId = $stmt->insert_id;
+            }
+
+            $stmt->close();
+        }
+
+        return $blocId;
     }
     
     public function getBlocRoles($blocId)
@@ -457,6 +494,26 @@ class DatabaseManager
         }
         
         return $roles;
+    }
+
+    public function log($level, $message)
+    {
+        $query = "
+            INSERT INTO fs_log (date, level, message)
+            VALUE (NOW(), ?, ?)";
+        $logId = null;
+        
+        if ($stmt = $this->mysqli->prepare($query)) {
+            $stmt->bind_param("is", $level, $message);
+
+            if ($stmt->execute()) {
+                $logId = $stmt->insert_id;
+            }
+
+            $stmt->close();
+        }
+
+        return $logId;
     }
 
     public function validateCredentials($login, $pwdHash)

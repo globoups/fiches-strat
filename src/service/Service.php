@@ -1,17 +1,24 @@
 <?php
+require_once("Response.php");
 require_once(dirname(__FILE__) . "/../session.php");
 require_once(dirname(__FILE__) . "/../data/ModelDataManager.php");
 
 class Service
 {
     protected $data = null;
+    protected $response = null;
     protected $user = null;
     
     public function __construct()
     {
         $this->data = new ModelDataManager();
+        $this->response = new Response();
         $this->initializeUser();
         header('Content-type:application/json;charset=utf-8');
+    }
+
+    public function printResponse() {
+        echo json_encode($this->response);
     }
 
     private function initializeUser()

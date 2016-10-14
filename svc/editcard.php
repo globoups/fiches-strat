@@ -5,4 +5,5 @@ $data = file_get_contents('php://input');
 
 $service = new CardService();
 $service->saveCard($data);
+$service->printResponse();
 ?>

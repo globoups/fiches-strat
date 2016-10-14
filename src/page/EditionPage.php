@@ -72,6 +72,10 @@ class EditionPage extends Page
             ?>
         </div>
         <?php
+            $this->renderModalSaveFail();
+            $this->renderModalSaveFailNotAuthenticated();
+            $this->renderModalSaveSuccess();
+            $this->renderModalSaving();
     }
     
     private function getRoleButtons($blocRoles)
@@ -275,6 +279,95 @@ class EditionPage extends Page
             ?>
             <textarea rows="1"><?= $bloc->content ?></textarea>
         </li>
+        <?php
+    }
+
+    private function renderModalSaveFail()
+    {
+        ?>
+        <div id="modalSaveFail" class="modal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Sauvegarde</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger">Erreur pendant la sauvegarde.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function renderModalSaveFailNotAuthenticated()
+    {
+        ?>
+        <div id="modalSaveFailNotAuthenticated" class="modal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Sauvegarde</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger">La session a expir&eacute;.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <a target="_blank" href="./authenticate.php" class="btn btn-default">Authentification</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function renderModalSaveSuccess()
+    {
+        ?>
+        <div id="modalSaveSuccess" class="modal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Sauvegarde</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-success">Fiche sauvegard&eacute;e.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="./" class="btn btn-default">Index</a>
+                        <a href="<?= $this->card->getUrl() ?>" class="btn btn-default">Voir fiche</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function renderModalSaving()
+    {
+        ?>
+        <div id="modalSaving" class="modal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Sauvegarde</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info">Sauvegarde en cours...</div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php
     }
 }
