@@ -2,20 +2,27 @@
     cursor: pointer;
 }
 
+.list-group-item {
+    padding: 7px 12px;
+}
+
+.list-group-item .table:last-child,
+.panel-body .list-group:last-child,
+.panel-body .table:last-child {
+    margin-bottom: 0;
+}
+
 .modal img {
     max-height: 100%;
     max-width: 100%;
 }
 
-.list-group-item .table,
-.panel-body .list-group,
-.panel-body .table {
-    margin-bottom: 0;
+.panel-body > h4:first-child {
+    margin-top: 0;
 }
 
-.role-list li:hover{
+.role-item:hover {
     background: #E9E9E9;
-    border-radius: 4px;
 }
 
 .subtitle img {

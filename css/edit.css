@@ -1,0 +1,71 @@
+textarea {
+    resize: none;
+    width: 100%;
+}
+
+.bloc-btn {
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.bloc-btn:hover {
+    text-shadow: 0 0 3px;
+}
+
+.bloc-btn.delete {
+    color: tomato;
+}
+
+.bloc-btn.delete:active {
+    color: red;
+}
+
+.bloc-btn.move-down,
+.bloc-btn.move-up {
+    color: dimgrey;
+}
+
+.bloc-btn.move-down:active,
+.bloc-btn.move-up:active {
+    color: inherit;
+}
+
+.bloc-btn-grp .bloc-btn {
+    margin-left: 10px;
+}
+
+.btn-grp {
+    margin-top: 15px;
+}
+
+.info-bloc {
+    border-radius: 4px;
+}
+
+.wrapper-bloc .bloc-btn-grp {
+    padding-top: 10px;
+}
+
+.info-bloc .bloc-btn-grp {
+    padding-top: 14px;
+}
+
+.info-bloc-line .bloc-btn-grp {
+    padding-top: 4px;
+}
+
+.toggle-role {
+    cursor: pointer;
+}
+
+.wrapper-bloc:first-of-type > .panel-heading > .bloc-btn-grp > .bloc-btn.move-up,
+.wrapper-bloc:nth-last-of-type(2) > .panel-heading > .bloc-btn-grp > .bloc-btn.move-down,
+.info-bloc:first-of-type > div > .bloc-btn-grp > .bloc-btn.move-up,
+.info-bloc:nth-last-of-type(2) > div > .bloc-btn-grp > .bloc-btn.move-down,
+.info-bloc-line:first-of-type > .bloc-btn-grp > .bloc-btn.move-up,
+.info-bloc-line:nth-last-of-type(2) > .bloc-btn-grp > .bloc-btn.move-down {
+    color: lightgray;
+    cursor: inherit;
+    text-shadow: none;
+}
