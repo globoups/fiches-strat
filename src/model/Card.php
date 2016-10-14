@@ -7,6 +7,7 @@ class Card
     public $difficulty = null;
     public $difficultyKey = null;
     public $id = null;
+    public $revision = null;
     public $role = null;
     public $roleKey = null;
 	

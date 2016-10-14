@@ -84,7 +84,7 @@ class DatabaseManager
     public function getBlocRoles($blocId)
     {
         $query = "
-            SELECT r.*
+            SELECT r.key, r.name, r.order
             FROM fs_role r
             INNER JOIN fs_bloc_role br ON r.id = br.role_id
             WHERE br.bloc_id = ?
@@ -95,13 +95,13 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("i", $blocId);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_key, $_name, $_order);
             
-            while ($row = $res->fetch_assoc()) {
+            while ($stmt->fetch()) {
                 $role = new Role();
-                $role->key = $row["key"];
-                $role->name = $row["name"];
-                $role->order = $row["order"];
+                $role->key = $_key;
+                $role->name = $_name;
+                $role->order = $_order;
                 $roles[] = $role;
             }
             
@@ -114,7 +114,7 @@ class DatabaseManager
     public function getBlocsByCardId($cardId)
     {
         $query = "
-            SELECT *
+            SELECT id, type, key, content, order
             FROM fs_bloc
             WHERE card_id = ?
             ORDER BY `order`";
@@ -123,15 +123,15 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("i", $cardId);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_id, $_type, $_key, $_content, $_order);
             
-            while ($row = $res->fetch_assoc()) {
+            while ($stmt->fetch()) {
                 $bloc = new Bloc();
-                $bloc->id = $row["id"];
-                $bloc->type = $row["type"];
-                $bloc->key = $row["key"];
-                $bloc->content = $row["content"];
-                $bloc->order = $row["order"];
+                $bloc->id = $_id;
+                $bloc->type = $_type;
+                $bloc->key = $_key;
+                $bloc->content = $_content;
+                $bloc->order = $_order;
                 $blocs[] = $bloc;
             }
             
@@ -144,7 +144,7 @@ class DatabaseManager
     public function getBlocsByParentId($parentId)
     {
         $query = "
-            SELECT *
+            SELECT id, type, key, content, order
             FROM fs_bloc
             WHERE parent_id = ?
             ORDER BY `order`";
@@ -153,15 +153,15 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("i", $parentId);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_id, $_type, $_key, $_content, $_order);
             
-            while ($row = $res->fetch_assoc()) {
+            while ($stmt->fetch()) {
                 $bloc = new Bloc();
-                $bloc->id = $row["id"];
-                $bloc->type = $row["type"];
-                $bloc->key = $row["key"];
-                $bloc->content = $row["content"];
-                $bloc->order = $row["order"];
+                $bloc->id = $_id;
+                $bloc->type = $_type;
+                $bloc->key = $_key;
+                $bloc->content = $_content;
+                $bloc->order = $_order;
                 $blocs[] = $bloc;
             }
             
@@ -174,7 +174,7 @@ class DatabaseManager
     public function getBoss($key)
     {
         $query = "
-            SELECT b.*, i.key AS instance_key
+            SELECT b.id, b.key, b.name, b.order, i.key AS instance_key
             FROM fs_boss b
             INNER JOIN fs_instance i ON i.id = b.instance_id
             WHERE b.key = ?";
@@ -183,15 +183,15 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("s", $key);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_id, $_key, $_name, $_order, $_instance_key);
             
-            if ($row = $res->fetch_assoc()) {
+            if ($stmt->fetch()) {
                 $boss = new Boss();
-                $boss->id = $row["id"];
-                $boss->key = $row["key"];
-                $boss->name = $row["name"];
-                $boss->order = $row["order"];
-                $boss->instanceKey = $row["instance_key"];
+                $boss->id = $_id;
+                $boss->key = $_key;
+                $boss->name = $_name;
+                $boss->order = $_order;
+                $boss->instanceKey = $_instance_key;
             }
             
             $stmt->close();
@@ -225,7 +225,7 @@ class DatabaseManager
     public function getCard($bossKey, $difficultyKey, $roleKey)
     {
         $query = "
-            SELECT c.*, b.key AS boss_key, d.key AS difficulty_key, r.key as role_key
+            SELECT c.id, b.key AS boss_key, d.key AS difficulty_key, r.key as role_key, c.version
             FROM fs_card c
             INNER JOIN fs_boss b ON b.id = c.boss_id
             INNER JOIN fs_difficulty d ON d.id = c.difficulty_id
@@ -238,14 +238,15 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("sss", $bossKey, $difficultyKey, $roleKey);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_id, $_boss_key, $_difficulty_key, $_role_key, $_revision);
             
-            if ($row = $res->fetch_assoc()) {
+            if ($stmt->fetch()) {
                 $card = new Card();
-                $card->id = $row["id"];
-                $card->bossKey = $row["boss_key"];
-                $card->difficultyKey = $row["difficulty_key"];
-                $card->roleKey = $row["role_key"];
+                $card->id = $_id;
+                $card->bossKey = $_boss_key;
+                $card->difficultyKey = $_difficulty_key;
+                $card->roleKey = $_role_key;
+                $card->revision = $_revision;
             }
             
             $stmt->close();
@@ -268,9 +269,9 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("sss", $bossKey, $difficultyKey, $roleKey);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_last_version);
             
-            if ($row = $res->fetch_assoc()) {
+            if ($stmt->fetch()) {
                 $nextVersion = $row["last_version"] + 1;
             }
             
@@ -328,7 +329,7 @@ class DatabaseManager
     public function getDifficulty($key)
     {
         $query = "
-            SELECT *
+            SELECT id, `key`, name, `order`
             FROM fs_difficulty
             WHERE `key` = ?";
         $difficulty = null;
@@ -336,14 +337,14 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("s", $key);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_id, $_key, $_name, $_order);
             
-            if ($row = $res->fetch_assoc()) {
+            if ($stmt->fetch()) {
                 $difficulty = new Difficulty();
-                $difficulty->id = $row["id"];
-                $difficulty->key = $row["key"];
-                $difficulty->name = $row["name"];
-                $difficulty->order = $row["order"];
+                $difficulty->id = $_id;
+                $difficulty->key = $_key;
+                $difficulty->name = $_name;
+                $difficulty->order = $_order;
             }
             
             $stmt->close();
@@ -355,7 +356,7 @@ class DatabaseManager
     public function getInstance($key)
     {
         $query = "
-            SELECT i.*, it.key AS instance_type_key
+            SELECT i.expanded, i.key, i.name, i.order, it.key AS instance_type_key
             FROM fs_instance i
             INNER JOIN fs_instance_type it ON it.id = i.instance_type_id
             WHERE i.key = ?";
@@ -364,15 +365,15 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("s", $key);
             $stmt->execute();
-            $res = $stmt->get_result();
-            
-            if ($row = $res->fetch_assoc()) {
+            $stmt->bind_result($_expanded, $_key, $_name, $_order, $_instance_type_key);
+
+            if ($stmt->fetch()) {
                 $instance = new Instance();
-                $instance->isExpanded = $row["expanded"];
-                $instance->key = $row["key"];
-                $instance->name = $row["name"];
-                $instance->order = $row["order"];
-                $instance->typeKey = $row["instance_type_key"];
+                $instance->isExpanded = $_expanded;
+                $instance->key = $_key;
+                $instance->name = $_name;
+                $instance->order = $_order;
+                $instance->typeKey = $_instance_type_key;
             }
             
             $stmt->close();
@@ -427,7 +428,7 @@ class DatabaseManager
     public function getRole($key)
     {
         $query = "
-            SELECT *
+            SELECT id, `key`, name, `order`
             FROM fs_role
             WHERE `key` = ?";
         $role = null;
@@ -435,14 +436,14 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("s", $key);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_id, $_key, $_name, $_order);
             
-            if ($row = $res->fetch_assoc()) {
+            if ($stmt->fetch()) {
                 $role = new Role();
-                $role->id = $row["id"];
-                $role->key = $row["key"];
-                $role->name = $row["name"];
-                $role->order = $row["order"];
+                $role->id = $_id;
+                $role->key = $_key;
+                $role->name = $_name;
+                $role->order = $_order;
             }
             
             $stmt->close();
@@ -454,20 +455,20 @@ class DatabaseManager
     public function getUser($name)
     {
         $query = "
-            SELECT *
+            SELECT id, name
             FROM fs_user
-            WHERE `name` = ?";
+            WHERE name = ?";
         $user = null;
         
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("s", $name);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_id, $_name);
             
-            if ($row = $res->fetch_assoc()) {
+            if ($stmt->fetch()) {
                 $user = new User();
-                $user->id = $row["id"];
-                $user->name = $row["name"];
+                $user->id = $_id;
+                $user->name = $_name;
             }
             
             $stmt->close();
@@ -527,10 +528,10 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("ss", $login, $pwdHash);
             $stmt->execute();
-            $res = $stmt->get_result();
+            $stmt->bind_result($_results);
             
-            if ($row = $res->fetch_assoc()) {
-                $result = $row["results"] == 1;
+            if ($stmt->fetch()) {
+                $result = $_results == 1;
             }
             
             $stmt->close();
