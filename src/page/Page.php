@@ -68,12 +68,12 @@ class Page
         $result = $text;
         
         // Transform wowhead tags
-        $wowheadTagPattern = '/\[wh:(.*)\|(.*)\]/';
+        $wowheadTagPattern = '/\[wh:([^\|]*)\|([^\]]*)\]/';
         $wowheadLinkReplacement = '<a href="'.$this->wowheadUrl.'${1}">[${2}]</a>';
         $result = preg_replace($wowheadTagPattern, $wowheadLinkReplacement, $result);
         
         // Transform image tags
-        $wowheadTagPattern = '/\[img:(.*)\|(.*)\]/';
+        $wowheadTagPattern = '/\[img:([^\|]*)\|([^\]]*)\]/';
         $wowheadLinkReplacement = '<img src="${1}">[${2}]</a>';
         $result = preg_replace($wowheadTagPattern, $wowheadLinkReplacement, $result);
         
