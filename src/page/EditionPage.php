@@ -9,6 +9,7 @@ class EditionPage extends Page
     
     public function __construct($bossKey, $difficultyKey, $roleKey)
     {
+		$this->key = "edit";
         parent::__construct();
 
         if (!$this->user->isAuthenticated) {

@@ -1,0 +1,20 @@
+[
+    {
+        "icon": "home",
+        "isAuthRequired": false,
+        "key": "index",
+        "position": "left",
+        "text": "Accueil",
+        "url": "./",
+        "visibleOn": null
+    },
+    {
+        "icon": "pencil",
+        "isAuthRequired": true,
+        "key": "edit",
+        "position": "right",
+        "text": "Editer",
+        "url": "./edit.php?",
+        "visibleOn": [ "card", "edit" ]
+    }
+]

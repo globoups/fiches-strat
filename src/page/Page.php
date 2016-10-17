@@ -4,10 +4,13 @@ require_once(dirname(__FILE__) . "/../model/User.php");
 
 class Page
 {
+	private $navLinks = array();
+	private $navOptions = array();
     private $wowheadUrl = "http://fr.wowhead.com/";
     
     protected $cssPaths = array();
     protected $jsPaths = array();
+    protected $key = null;
     protected $title = null;
     protected $user = null;
     
@@ -26,6 +29,7 @@ class Page
         $this->jsPaths[] = "js/main.js";
 
         $this->initializeUser();
+        $this->initializeNavigation();
     }
     
     public function render()
@@ -39,6 +43,9 @@ class Page
             ?>
         </head>
         <body>
+            <?php
+                $this->renderNav();
+            ?>
             <div class="container">
                 <?php
                     $this->renderBody();
@@ -85,6 +92,23 @@ class Page
         return $result;
     }
 
+    private function initializeNavigation()
+    {
+        $navFileContent = file_get_contents(dirname(__FILE__) . "/navigation.json");
+        $navItems = json_decode($navFileContent);
+
+        foreach ($navItems as $navItem) {
+            if ((!$navItem->isAuthRequired || $this->user->isAuthenticated) && (is_null($navItem->visibleOn) || in_array($this->key, $navItem->visibleOn))) {
+                if ($navItem->position == "left") {
+                    $this->navLinks[] = $navItem;
+                }
+                else if ($navItem->position == "right") {
+                    $this->navOptions[] = $navItem;
+                }
+            }
+        }
+    }
+
     private function initializeUser()
     {
         $this->user = new User();
@@ -117,6 +141,81 @@ class Page
                     <script src="<?= $jsPath ?>"></script>
                 <?php
             }
+    }
+
+    private function renderNav()
+    {
+        ?>
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navContent">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+					<span class="navbar-brand">Fiches strat</span>
+				</div>
+                <div id="navContent" class="collapse navbar-collapse">
+				    <ul class="nav navbar-nav">
+					    <?php
+		                    foreach ($this->navLinks as $navLink) {
+						        $this->renderNavItem($navLink);
+		                    }
+					    ?>
+				    </ul>
+				    <ul class="nav navbar-nav navbar-right">
+					    <?php
+		                    foreach ($this->navOptions as $navOption) {
+						        $this->renderNavItem($navOption);
+		                    }
+                        
+                            if ($this->user->isAuthenticated) {
+					            ?>
+					            <li>
+						            <a class="pull-right auth-light-on" href="./deauthenticate.php"><span class="glyphicon glyphicon-off"></span></a>
+					            </li>
+                                <?php
+                            }
+                            else {
+					            ?>
+					            <li>
+						            <a class="pull-right" href="./authenticate.php"><span class="glyphicon glyphicon-off"></span></a>
+					            </li>
+                                <?php
+                            }
+					    ?>
+				    </ul>
+                </div>
+			</div>
+		</nav>
+        <?php
+    }
+	
+
+    private function renderNavItem($item)
+    {
+        $icon = "";
+        $url = $item->url;
+        $wrapperCssClass = "";
+
+        if (!is_null($item->icon)) {
+            $icon = '<span class="glyphicon glyphicon-'.$item->icon.'"></span> ';
+        }
+
+        if (substr($item->url, -1) == "?") {
+            $url .= $_SERVER['QUERY_STRING'];
+        }
+
+        if ($item->key == $this->key) {
+            $wrapperCssClass = "active";
+        }
+
+		?>
+			<li class="<?= $wrapperCssClass ?>">
+				<a href="<?= $url ?>"><?= $icon ?><?= $item->text ?></a>
+			</li>
+		<?php
     }
 }
 ?>

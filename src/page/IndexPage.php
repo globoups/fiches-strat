@@ -13,6 +13,7 @@ class IndexPage extends Page
 	
 	public function __construct()
 	{
+		$this->key = "index";
         parent::__construct();
 		$data = new ModelDataManager();
 		$this->bosses = $data->getBosses();
@@ -26,12 +27,9 @@ class IndexPage extends Page
 	
 	protected function renderBody()
 	{
-		?>
-		<h1>Fiches strat</h1>
-		<?php
-			foreach($this->instanceTypes as $instanceType) {
-				$this->renderInstancesByType($instanceType, $this->instances);
-			}
+		foreach($this->instanceTypes as $instanceType) {
+			$this->renderInstancesByType($instanceType, $this->instances);
+		}
 	}
 	
 	private function getCard($bossKey, $difficultyKey, $roleKey)

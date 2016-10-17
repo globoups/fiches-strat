@@ -8,6 +8,7 @@ class CardPage extends Page
     
     public function __construct($bossKey, $difficultyKey, $roleKey)
     {
+		$this->key = "card";
         parent::__construct();
         $data = new ModelDataManager();
         $this->card = $data->getCard($bossKey, $difficultyKey, $roleKey);
@@ -16,7 +17,7 @@ class CardPage extends Page
             header("Location: .");
             die();
         }
-
+        
         $this->title = $this->card->getTitle();
     }
     

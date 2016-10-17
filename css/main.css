@@ -17,6 +17,20 @@
     max-width: 100%;
 }
 
+.navbar {
+	border-radius: 0;
+	border-width: 0 0 1px;
+}
+
+.navbar .navbar-nav > li > a.auth-light-on {
+    color: limegreen;
+    text-shadow: 0 0 3px;
+}
+
+.navbar .navbar-nav > li > a.auth-light-on:hover {
+    color: lawngreen;
+}
+
 .panel-body > h4:first-child {
     margin-top: 0;
 }
