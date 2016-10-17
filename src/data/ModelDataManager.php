@@ -140,10 +140,12 @@ class ModelDataManager
             $result = $this->database->getCard($bossKey, $difficultyKey, $roleKey);
         }
         
-        $result->boss = $this->getBoss($result->bossKey);
-        $result->difficulty = $this->getDifficulty($result->difficultyKey);
-        $result->role = $this->getRole($result->roleKey);
-        $result->blocs = $this->getBlocsByCardId($result->id);
+        if (!is_null($result)) {
+            $result->boss = $this->getBoss($result->bossKey);
+            $result->difficulty = $this->getDifficulty($result->difficultyKey);
+            $result->role = $this->getRole($result->roleKey);
+            $result->blocs = $this->getBlocsByCardId($result->id);
+        }
         
         return $result;
     }

@@ -45,14 +45,26 @@ class IndexPage extends Page
 		return NULL;
 	}
 	
+	private function getCardEditUrl($boss, $difficulty, $role)
+	{
+		return "edit.php?boss=".$boss->key."&difficulty=".$difficulty->key."&role=".$role->key;
+	}
+	
 	private function renderCardLink($boss, $difficulty, $role)
 	{
 		$card = $this->getCard($boss->key, $difficulty->key, $role->key);
 		
 		if (is_null($card)) {
-			?>
-				<span class="icon role-<?= $role->key ?>-disabled-32"></span>
-			<?php
+            if ($this->user->isAuthenticated) {
+			    ?>
+				    <a href="<?= $this->getCardEditUrl($boss, $difficulty, $role) ?>" class="icon role-<?= $role->key ?>-disabled-32"></a>
+			    <?php
+            }
+            else {
+			    ?>
+				    <span class="icon role-<?= $role->key ?>-disabled-32"></span>
+			    <?php
+            }
 		}
 		else {
 			?>

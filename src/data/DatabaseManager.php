@@ -114,7 +114,7 @@ class DatabaseManager
     public function getBlocsByCardId($cardId)
     {
         $query = "
-            SELECT id, type, key, content, order
+            SELECT id, type, `key`, content, `order`
             FROM fs_bloc
             WHERE card_id = ?
             ORDER BY `order`";
@@ -144,7 +144,7 @@ class DatabaseManager
     public function getBlocsByParentId($parentId)
     {
         $query = "
-            SELECT id, type, key, content, order
+            SELECT id, type, `key`, content, `order`
             FROM fs_bloc
             WHERE parent_id = ?
             ORDER BY `order`";
@@ -272,7 +272,7 @@ class DatabaseManager
             $stmt->bind_result($_last_version);
             
             if ($stmt->fetch()) {
-                $nextVersion = $row["last_version"] + 1;
+                $nextVersion = $_last_version + 1;
             }
             
             $stmt->close();
