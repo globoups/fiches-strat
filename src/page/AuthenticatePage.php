@@ -93,12 +93,10 @@ class AuthenticatePage extends Page
 
     private function renderLoginSuccess() {
 		?>
-        <form action="." method="post">
-            <div class="alert alert-success">
-                Bienvenue <strong><?= $this->username ?></strong>.
-            </div>
-            <button type="submit" class="btn btn-default pull-right">Retour</button>
-        </form>
+        <div class="alert alert-success">
+            Bienvenue <strong><?= $this->username ?></strong>.
+        </div>
+        <a href="./" class="btn btn-default pull-right">Retour</a>
         <?php
     }
 }
