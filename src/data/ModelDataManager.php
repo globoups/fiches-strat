@@ -16,6 +16,11 @@ class ModelDataManager
         $this->database = new DatabaseManager();
     }
 
+    public function createBlocRole($bloc, $roleKey)
+    {
+        return $this->database->createBlocRole($bloc, $roleKey);
+    }
+
     public function createCard($card, $user)
     {
         $card->id = $this->database->createCard($card, $user);
@@ -35,6 +40,15 @@ class ModelDataManager
         if (is_null($bloc->id)) {
             $this->logError("createChildBloc failed.\n".serialize($bloc)."\n".serialize($parentBloc));
             return false;
+        }
+        else {
+            if (!is_null($bloc->roleKeys)) {
+                foreach ($bloc->roleKeys as $roleKey) {
+                    if (!$this->createBlocRole($bloc, $roleKey)) {
+                        return false;
+                    }
+                }
+            }
         }
 
         if (!is_null($bloc->children)) {

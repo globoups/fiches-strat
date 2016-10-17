@@ -12,12 +12,30 @@ class DatabaseManager
         $this->mysqli->set_charset($GLOBALS["dbCharset"]);
     }
 
+    public function createBlocRole($bloc, $roleKey)
+    {
+        $query = "
+            INSERT INTO fs_bloc_role (bloc_id, role_id)
+            SELECT ?, id
+            FROM fs_role
+            WHERE `key` = ?";
+        $result = false;
+        
+        if ($stmt = $this->mysqli->prepare($query)) {
+            $stmt->bind_param("is", $bloc->id, $roleKey);
+            $result = $stmt->execute();
+            $stmt->close();
+        }
+
+        return $result;
+    }
+
     public function createCard($card, $user)
     {
-        $boss = $this->getBoss($card->boss_key);
-        $difficulty = $this->getDifficulty($card->difficulty_key);
-        $role = $this->getRole($card->role_key);
-        $nextVersion = $this->getCardNextVersion($card->boss_key, $card->difficulty_key, $card->role_key);
+        $boss = $this->getBoss($card->bossKey);
+        $difficulty = $this->getDifficulty($card->difficultyKey);
+        $role = $this->getRole($card->roleKey);
+        $nextVersion = $this->getCardNextVersion($card->bossKey, $card->difficultyKey, $card->roleKey);
         $user = $this->getUser($user->name);
         
         $cardId = null;

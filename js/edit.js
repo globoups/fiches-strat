@@ -25,9 +25,9 @@ function buildBloc(element) {
 function buildCard() {
     var card = {
         blocs: [],
-        boss_key: $("input[name=boss]").val(),
-        difficulty_key: $("input[name=difficulty]").val(),
-        role_key: $("input[name=role]").val()
+        bossKey: $("input[name=boss]").val(),
+        difficultyKey: $("input[name=difficulty]").val(),
+        roleKey: $("input[name=role]").val()
     };
     var order = 0;
 
@@ -54,7 +54,7 @@ function buildInfoBloc(element) {
         children: children,
         content: element.find("input[type=text]").first().val(),
         order: 0,
-        roles: null,
+        roleKeys: null,
         type: 2
     };
 
@@ -62,13 +62,13 @@ function buildInfoBloc(element) {
 }
 
 function buildInfoBlocLine(element) {
-    var roles = [];
+    var roleKeys = [];
 
     element.find(".toggle-role").each(function () {
-        var role = getRole($(this));
+        var roleKey = getRole($(this));
 
         if ($(this).hasClass("enabled")) {
-            roles.push(role);
+            roleKeys.push(roleKey);
         }
     });
 
@@ -76,7 +76,7 @@ function buildInfoBlocLine(element) {
         children: null,
         content: element.find("textarea").first().val(),
         order: 0,
-        roles: roles,
+        roleKeys: roleKeys,
         type: 3
     };
 
@@ -97,7 +97,7 @@ function buildWrapperBloc(element) {
         children: children,
         content: element.find("input[type=text]").first().val(),
         order: 0,
-        roles: null,
+        roleKeys: null,
         type: 1
     };
 
