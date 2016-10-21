@@ -8,7 +8,7 @@ class CardPage extends Page
     
     public function __construct($bossKey, $difficultyKey, $roleKey)
     {
-		$this->key = "card";
+        $this->key = "card";
         parent::__construct();
         $data = new ModelDataManager();
         $this->card = $data->getCard($bossKey, $difficultyKey, $roleKey);
@@ -17,7 +17,7 @@ class CardPage extends Page
             header("Location: .");
             die();
         }
-        
+
         $this->title = $this->card->getTitle();
     }
     
@@ -76,10 +76,10 @@ class CardPage extends Page
     {
         ?>
         <div class="panel panel-default">
-            <div class="panel-heading" data-toggle="collapse" data-target="#<?= $bloc->key ?>-body">
+            <div class="panel-heading" data-toggle="collapse" data-target="#<?= $bloc->id ?>-body">
                 <h4><?= $bloc->content ?></h4>
             </div>
-            <div id="<?= $bloc->key ?>-body" class="collapse in">
+            <div id="<?= $bloc->id ?>-body" class="collapse in">
                 <div class="panel-body">
                     <?php
                         if (!is_null($bloc->children)) {

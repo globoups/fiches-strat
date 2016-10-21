@@ -132,7 +132,7 @@ class DatabaseManager
     public function getBlocsByCardId($cardId)
     {
         $query = "
-            SELECT id, type, `key`, content, `order`
+            SELECT id, type, content, `order`
             FROM fs_bloc
             WHERE card_id = ?
             ORDER BY `order`";
@@ -141,13 +141,12 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("i", $cardId);
             $stmt->execute();
-            $stmt->bind_result($_id, $_type, $_key, $_content, $_order);
+            $stmt->bind_result($_id, $_type, $_content, $_order);
             
             while ($stmt->fetch()) {
                 $bloc = new Bloc();
                 $bloc->id = $_id;
                 $bloc->type = $_type;
-                $bloc->key = $_key;
                 $bloc->content = $_content;
                 $bloc->order = $_order;
                 $blocs[] = $bloc;
@@ -162,7 +161,7 @@ class DatabaseManager
     public function getBlocsByParentId($parentId)
     {
         $query = "
-            SELECT id, type, `key`, content, `order`
+            SELECT id, type, content, `order`
             FROM fs_bloc
             WHERE parent_id = ?
             ORDER BY `order`";
@@ -171,13 +170,12 @@ class DatabaseManager
         if ($stmt = $this->mysqli->prepare($query)) {
             $stmt->bind_param("i", $parentId);
             $stmt->execute();
-            $stmt->bind_result($_id, $_type, $_key, $_content, $_order);
+            $stmt->bind_result($_id, $_type, $_content, $_order);
             
             while ($stmt->fetch()) {
                 $bloc = new Bloc();
                 $bloc->id = $_id;
                 $bloc->type = $_type;
-                $bloc->key = $_key;
                 $bloc->content = $_content;
                 $bloc->order = $_order;
                 $blocs[] = $bloc;
