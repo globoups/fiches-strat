@@ -242,9 +242,13 @@ class EditionPage extends Page
         <!-- Info item -->
         <li class="list-group-item info-item">
             <div class="pull-left">
-                <span class="toggle-role tank disabled icon role-tank-disabled-32"></span>
-                <span class="toggle-role heal disabled icon role-heal-disabled-32"></span>
-                <span class="toggle-role dps disabled icon role-dps-disabled-32"></span>
+                <?php
+                    foreach ($this->roles as $role) {
+                        ?>
+                        <span class="toggle-role <?= $role->key ?> disabled icon role-<?= $role->key ?>-disabled-32"></span>
+                        <?php
+                    }
+                ?>
             </div>
             <?php
                 $this->renderBlocButtonsGroup();

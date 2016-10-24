@@ -1,5 +1,5 @@
 var blocTypes = [".info-item", ".schema-item", ".info-bloc", ".schema-bloc", ".wrapper-bloc"];
-var roles = ["tank", "heal", "dps"];
+var roles = ["rl", "tank", "heal", "dps"];
 
 function buildBloc(element) {
     var blocType = getBlocType(element);
