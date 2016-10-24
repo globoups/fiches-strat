@@ -1,4 +1,4 @@
-var blocTypes = [".info-bloc-line", ".info-bloc", ".wrapper-bloc"];
+var blocTypes = [".info-item", ".schema-item", ".info-bloc", ".schema-bloc", ".wrapper-bloc"];
 var roles = ["tank", "heal", "dps"];
 
 function buildBloc(element) {
@@ -13,7 +13,13 @@ function buildBloc(element) {
             bloc = buildInfoBloc(element);
             break;
         case 3:
-            bloc = buildInfoBlocLine(element);
+            bloc = buildInfoItem(element);
+            break;
+        case 4:
+            bloc = buildSchemaBloc(element);
+            break;
+        case 5:
+            bloc = buildSchemaItem(element);
             break;
         default:
             break;
@@ -31,7 +37,7 @@ function buildCard() {
     };
     var order = 0;
 
-    $("#card-content").children(".info-bloc, .wrapper-bloc").each(function () {
+    $("#card-content").children(".info-bloc, .schema-bloc, .wrapper-bloc").each(function () {
         var bloc = buildBloc($(this));
         bloc.order = ++order;
         card.blocs.push(bloc);
@@ -44,8 +50,8 @@ function buildInfoBloc(element) {
     var children = [];
     var order = 0;
 
-    element.children(".list-group").first().children(".info-bloc-line").each(function () {
-        var child = buildInfoBlocLine($(this));
+    element.children(".list-group").first().children(".info-item").each(function () {
+        var child = buildInfoItem($(this));
         child.order = ++order;
         children.push(child);
     });
@@ -61,7 +67,7 @@ function buildInfoBloc(element) {
     return bloc;
 }
 
-function buildInfoBlocLine(element) {
+function buildInfoItem(element) {
     var roleKeys = [];
 
     element.find(".toggle-role").each(function () {
@@ -83,12 +89,49 @@ function buildInfoBlocLine(element) {
     return bloc;
 }
 
+function buildSchemaBloc(element) {
+    var children = [];
+    var order = 0;
+
+    element.children(".list-group").first().children(".schema-item").each(function () {
+        var child = buildSchemaItem($(this));
+        child.order = ++order;
+        children.push(child);
+    });
+
+    var bloc = {
+        children: children,
+        content: element.find("input[type=text]").first().val(),
+        order: 0,
+        roleKeys: null,
+        type: 4
+    };
+
+    return bloc;
+}
+
+function buildSchemaItem(element) {
+    var title = element.find("input[type=text]").eq(0).val();
+    var url = element.find("input[type=text]").eq(1).val();
+    var content = "[schema:" + title + "|" + url + "]";
+
+    var bloc = {
+        children: null,
+        content: content,
+        order: 0,
+        roleKeys: null,
+        type: 5
+    };
+
+    return bloc;
+}
+
 function buildWrapperBloc(element) {
     var children = [];
     var order = 0;
 
-    element.find(".panel-body").first().children(".info-bloc").each(function () {
-        var child = buildInfoBloc($(this));
+    element.find(".panel-body").first().children(".info-bloc, .schema-bloc").each(function () {
+        var child = buildBloc($(this));
         child.order = ++order;
         children.push(child);
     });
@@ -113,8 +156,14 @@ function getBlocType(element) {
     else if (element.hasClass("info-bloc")) {
         result = 2;
     }
-    else if (element.hasClass("info-bloc-line")) {
+    else if (element.hasClass("info-item")) {
         result = 3;
+    }
+    else if (element.hasClass("schema-bloc")) {
+        result = 4;
+    }
+    else if (element.hasClass("schema-item")) {
+        result = 5;
     }
 
     return result;
@@ -174,16 +223,27 @@ function getRole(element) {
     return result;
 }
 
+function getTextareaOffset() {
+    var dummy = $("<textarea></textarea>");
+    dummy.css({ opacity: 0, position: "absolute" });
+    $("body").append(dummy);
+    var result = dummy[0].offsetHeight - dummy[0].clientHeight;
+    dummy.remove();
+
+    return result;
+}
+
 $(function () {
     var emptyWrapperBloc = $(".empty-blocs > .wrapper-bloc");
     var emptyInfoBloc = $(".empty-blocs > .info-bloc");
-    var emptyInfoBlocLine = $(".empty-blocs > .info-bloc-line");
+    var emptyInfoItem = $(".empty-blocs > .info-item");
+    var emptySchemaBloc = $(".empty-blocs > .schema-bloc");
+    var emptySchemaItem = $(".empty-blocs > .schema-item");
+    var textareaOffset = getTextareaOffset();
 
     $.each($("textarea"), function () {
-        var offset = this.offsetHeight - this.clientHeight;
-
         var resizeTextarea = function (el) {
-            $(el).css("height", "auto").css("height", el.scrollHeight + offset);
+            $(el).css("height", "auto").css("height", el.scrollHeight + textareaOffset);
         };
 
         $(this).on("keyup input", function () { resizeTextarea(this); });
@@ -201,8 +261,16 @@ $(function () {
         $(this).parent().before(emptyInfoBloc.clone(true));
     });
 
-    $(".add-info-bloc-line").click(function () {
-        $(this).parent().before(emptyInfoBlocLine.clone(true));
+    $(".add-info-item").click(function () {
+        $(this).parent().before(emptyInfoItem.clone(true));
+    });
+
+    $(".add-schema-bloc").click(function () {
+        $(this).parent().before(emptySchemaBloc.clone(true));
+    });
+
+    $(".add-schema-item").click(function () {
+        $(this).parent().before(emptySchemaItem.clone(true));
     });
 
     $(".delete").click(function () {

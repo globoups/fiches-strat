@@ -35,8 +35,12 @@ textarea {
     margin-left: 10px;
 }
 
-.btn-grp {
+.btn-grp:last-child {
     margin-top: 15px;
+}
+
+.btn-grp:first-child {
+    margin-top: 0;
 }
 
 .info-bloc {
@@ -47,11 +51,13 @@ textarea {
     padding-top: 10px;
 }
 
-.info-bloc .bloc-btn-grp {
+.info-bloc .bloc-btn-grp,
+.schema-bloc .bloc-btn-grp {
     padding-top: 14px;
 }
 
-.info-bloc-line .bloc-btn-grp {
+.info-item .bloc-btn-grp,
+.schema-item .bloc-btn-grp {
     padding-top: 4px;
 }
 
@@ -63,8 +69,12 @@ textarea {
 .wrapper-bloc:nth-last-of-type(2) > .panel-heading > .bloc-btn-grp > .bloc-btn.move-down,
 .info-bloc:first-of-type > div > .bloc-btn-grp > .bloc-btn.move-up,
 .info-bloc:nth-last-of-type(2) > div > .bloc-btn-grp > .bloc-btn.move-down,
-.info-bloc-line:first-of-type > .bloc-btn-grp > .bloc-btn.move-up,
-.info-bloc-line:nth-last-of-type(2) > .bloc-btn-grp > .bloc-btn.move-down {
+.info-item:first-of-type > .bloc-btn-grp > .bloc-btn.move-up,
+.info-item:nth-last-of-type(2) > .bloc-btn-grp > .bloc-btn.move-down,
+.schema-bloc:first-of-type > div > .bloc-btn-grp > .bloc-btn.move-up,
+.schema-bloc:nth-last-of-type(2) > div > .bloc-btn-grp > .bloc-btn.move-down,
+.schema-item:first-of-type > .bloc-btn-grp > .bloc-btn.move-up,
+.schema-item:nth-last-of-type(2) > .bloc-btn-grp > .bloc-btn.move-down {
     color: lightgray;
     cursor: inherit;
     text-shadow: none;

@@ -192,7 +192,6 @@ class Page
         <?php
     }
 	
-
     private function renderNavItem($item)
     {
         $icon = "";

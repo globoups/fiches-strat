@@ -59,13 +59,18 @@ class EditionPage extends Page
                     $this->renderBloc($bloc);
                 }
             ?>
-            <div>
-                <a class="btn btn-info add-wrapper-bloc">Add wrapper bloc</a>
-                <a class="btn btn-info add-info-bloc">Add info bloc</a>
+            <div class="btn-group">
+                <?php
+                    $this->renderButtonAddWrapperBloc();
+                    $this->renderButtonAddInfoBloc();
+                    $this->renderButtonAddSchemaBloc();
+                ?>
             </div>
         </div>
         <div class="clearfix">
-            <a class="btn btn-success pull-right save">Save</a>
+            <?php
+                $this->renderButtonSave();
+            ?>
         </div>
         <div class="empty-blocs" style="display:none">
             <?php
@@ -77,6 +82,48 @@ class EditionPage extends Page
             $this->renderModalSaveFailNotAuthenticated();
             $this->renderModalSaveSuccess();
             $this->renderModalSaving();
+    }
+
+    private function renderButtonAddInfoBloc()
+    {
+        ?>
+            <a class="btn btn-info add-info-bloc"><span class="glyphicon glyphicon-plus"></span> Infos</a>
+        <?php
+    }
+
+    private function renderButtonAddInfoItem()
+    {
+        ?>
+            <a class="btn btn-info add-info-item"><span class="glyphicon glyphicon-plus"></span> Info</a>
+        <?php
+    }
+
+    private function renderButtonAddSchemaBloc()
+    {
+        ?>
+            <a class="btn btn-info add-schema-bloc"><span class="glyphicon glyphicon-plus"></span> Sch&eacute;mas</a>
+        <?php
+    }
+
+    private function renderButtonAddSchemaItem()
+    {
+        ?>
+            <a class="btn btn-info add-schema-item"><span class="glyphicon glyphicon-plus"></span> Sch&eacute;ma</a>
+        <?php
+    }
+
+    private function renderButtonAddWrapperBloc()
+    {
+        ?>
+            <a class="btn btn-info add-wrapper-bloc"><span class="glyphicon glyphicon-plus"></span> Conteneur</a>
+        <?php
+    }
+
+    private function renderButtonSave()
+    {
+        ?>
+            <a class="btn btn-success pull-right save"><span class="glyphicon glyphicon-save"></span> Enregistrer</a>
+        <?php
     }
     
     private function getRoleButtons($blocRoles)
@@ -107,21 +154,25 @@ class EditionPage extends Page
     {
         switch($bloc->type)
         {
-            // Main bloc
+            // Wrapper bloc
             case 1:
                 $this->renderWrapperBloc($bloc);
                 break;
-            // Sub bloc
+            // Info bloc
             case 2:
                 $this->renderInfoBloc($bloc);
                 break;
-            // Sub bloc line
+            // Info item
             case 3:
-                $this->renderInfoLine($bloc);
+                $this->renderInfoItem($bloc);
                 break;
-            // Modal bloc
+            // Schema bloc
             case 4:
-                $this->renderModalBloc($bloc);
+                $this->renderSchemaBloc($bloc);
+                break;
+            // Schema item
+            case 5:
+                $this->renderSchemaItem($bloc);
                 break;
             default:
                 ?>
@@ -145,11 +196,12 @@ class EditionPage extends Page
     private function renderEmptyBlocs()
     {
         ?>
+        <!-- Wrapper bloc -->
         <div class="panel panel-default wrapper-bloc">
             <div class="panel-heading clearfix">
                 <div class="pull-left">
                     <h4>
-                        <input type="text" value="">
+                        <input type="text" placeholder="Titre" value="">
                     </h4>
                 </div>
                 <?php
@@ -158,17 +210,21 @@ class EditionPage extends Page
             </div>
             <div>
                 <div class="panel-body">
-                    <div class="btn-grp">
-                        <a class="btn btn-info add-info-bloc">Add info bloc</a>
+                    <div class="btn-group btn-grp">
+                        <?php
+                            $this->renderButtonAddInfoBloc();
+                            $this->renderButtonAddSchemaBloc();
+                        ?>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Info bloc -->
         <div class="info-bloc">
             <div class="clearfix">
                 <div class="pull-left">
                     <h4>
-                        <input type="text" value="">
+                        <input type="text" placeholder="Titre" value="">
                     </h4>
                 </div>
                 <?php
@@ -177,11 +233,14 @@ class EditionPage extends Page
             </div>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <a class="btn btn-info add-info-bloc-line">Add info line</a>
+                    <?php
+                        $this->renderButtonAddInfoItem();
+                    ?>
                 </li>
             </ul>
         </div>
-        <li class="list-group-item info-bloc-line">
+        <!-- Info item -->
+        <li class="list-group-item info-item">
             <div class="pull-left">
                 <span class="toggle-role tank disabled icon role-tank-disabled-32"></span>
                 <span class="toggle-role heal disabled icon role-heal-disabled-32"></span>
@@ -190,47 +249,36 @@ class EditionPage extends Page
             <?php
                 $this->renderBlocButtonsGroup();
             ?>
-            <textarea rows="1"></textarea>
+            <textarea rows="1" placeholder="Contenu"></textarea>
         </li>
-        <?php
-    }
-    
-    private function renderWrapperBloc($bloc)
-    {
-        ?>
-        <div class="panel panel-default wrapper-bloc">
-            <div class="panel-heading clearfix">
+        <!-- Schema bloc -->
+        <div class="schema-bloc">
+            <div class="clearfix">
                 <div class="pull-left">
                     <h4>
-                        <input type="text" value="<?= $bloc->content ?>" />
+                        <input type="text" placeholder="Titre" value="">
                     </h4>
                 </div>
                 <?php
                     $this->renderBlocButtonsGroup();
                 ?>
             </div>
-            <div>
-                <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item">
                     <?php
-                        if (!is_null($bloc->children)) {
-                            foreach ($bloc->children as $bloc) {
-                                $this->renderBloc($bloc);
-                            }
-                        }
+                        $this->renderButtonAddSchemaItem();
                     ?>
-                    <div class="btn-grp">
-                        <a class="btn btn-info add-info-bloc">Add info bloc</a>
-                    </div>
-                </div>
-            </div>
+                </li>
+            </ul>
         </div>
-        <?php
-    }
-    
-    private function renderModalBloc($bloc)
-    {
-        ?>
-            
+        <!-- Schema item -->
+        <li class="list-group-item schema-item">
+            <?php
+                $this->renderBlocButtonsGroup();
+            ?>
+            <input type="text" placeholder="Titre" value="" />
+            <input type="text" placeholder="Url" value="" />
+        </li>
         <?php
     }
     
@@ -241,7 +289,7 @@ class EditionPage extends Page
             <div class="clearfix">
                 <div class="pull-left">
                     <h4>
-                        <input type="text" value="<?= $bloc->content ?>" />
+                        <input type="text" placeholder="Titre" value="<?= $bloc->content ?>" />
                     </h4>
                 </div>
                 <?php
@@ -257,17 +305,19 @@ class EditionPage extends Page
                     }
                 ?>
                 <li class="list-group-item">
-                    <a class="btn btn-info add-info-bloc-line">Add info line</a>
+                    <?php
+                        $this->renderButtonAddInfoItem();
+                    ?>
                 </li>
             </ul>
         </div>
         <?php
     }
     
-    private function renderInfoLine($bloc)
+    private function renderInfoItem($bloc)
     {
         ?>
-        <li class="list-group-item info-bloc-line">
+        <li class="list-group-item info-item">
             <div class="pull-left">
                 <?php
                     if (!is_null($this->roles)) {
@@ -278,8 +328,93 @@ class EditionPage extends Page
             <?php
                 $this->renderBlocButtonsGroup();
             ?>
-            <textarea rows="1"><?= $bloc->content ?></textarea>
+            <textarea rows="1" placeholder="Contenu"><?= $bloc->content ?></textarea>
         </li>
+        <?php
+    }
+    
+    private function renderSchemaBloc($bloc)
+    {
+        ?>
+        <div class="schema-bloc">
+            <div class="clearfix">
+                <div class="pull-left">
+                    <h4>
+                        <input type="text" placeholder="Titre" value="<?= $bloc->content ?>" />
+                    </h4>
+                </div>
+                <?php
+                    $this->renderBlocButtonsGroup();
+                ?>
+            </div>
+            <ul class="list-group">
+                <?php
+                    if (!is_null($bloc->children)) {
+                        foreach ($bloc->children as $bloc) {
+                            $this->renderBloc($bloc);
+                        }
+                    }
+                ?>
+                <li class="list-group-item">
+                    <?php
+                        $this->renderButtonAddSchemaItem();
+                    ?>
+                </li>
+            </ul>
+        </div>
+        <?php
+    }
+    
+    private function renderSchemaItem($bloc)
+    {
+        $schemaTagPattern = '/\[schema:([^\|]*)\|([^\]]*)\]/';
+        preg_match($schemaTagPattern, $bloc->content, $matches);
+        $title = $matches[1];
+        $url = $matches[2];
+
+        ?>
+        <li class="list-group-item schema-item">
+            <?php
+                $this->renderBlocButtonsGroup();
+            ?>
+            <input type="text" placeholder="Titre" value="<?= $title ?>" />
+            <input type="text" placeholder="Url" value="<?= $url ?>" />
+        </li>
+        <?php
+    }
+    
+    private function renderWrapperBloc($bloc)
+    {
+        ?>
+        <div class="panel panel-default wrapper-bloc">
+            <div class="panel-heading clearfix">
+                <div class="pull-left">
+                    <h4>
+                        <input type="text" placeholder="Titre" value="<?= $bloc->content ?>" />
+                    </h4>
+                </div>
+                <?php
+                    $this->renderBlocButtonsGroup();
+                ?>
+            </div>
+            <div>
+                <div class="panel-body">
+                    <?php
+                        if (!is_null($bloc->children)) {
+                            foreach ($bloc->children as $bloc) {
+                                $this->renderBloc($bloc);
+                            }
+                        }
+                    ?>
+                    <div class="btn-group btn-grp">
+                        <?php
+                            $this->renderButtonAddInfoBloc();
+                            $this->renderButtonAddSchemaBloc();
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php
     }
 

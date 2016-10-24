@@ -127,8 +127,8 @@ class CardPage extends Page
     {
         $schemaTagPattern = '/\[schema:([^\|]*)\|([^\]]*)\]/';
         preg_match($schemaTagPattern, $bloc->content, $matches);
-        $url = $matches[1];
-        $title = $matches[2];
+        $title = $matches[1];
+        $url = $matches[2];
 
         ?>
         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-<?= $bloc->id ?>"><?= $title ?></button>
@@ -137,7 +137,7 @@ class CardPage extends Page
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title"><?= $title ?></h4>
+                        <h4 class="modal-title"><?= $this->card->boss->name." ".strtoupper($this->card->difficulty->key) ?> - <?= $title ?></h4>
                     </div>
                     <div class="modal-body">
                         <img src="<?= $url ?>" />
