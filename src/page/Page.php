@@ -80,9 +80,9 @@ class Page
         $result = preg_replace($wowheadTagPattern, $wowheadLinkReplacement, $result);
         
         // Transform image tags
-        $wowheadTagPattern = '/\[img:([^\|]*)\|([^\]]*)\]/';
-        $wowheadLinkReplacement = '<img src="${1}">[${2}]</a>';
-        $result = preg_replace($wowheadTagPattern, $wowheadLinkReplacement, $result);
+        $imageTagPattern = '/\[img:([^\|]*)\|([^\]]*)\]/';
+        $imageReplacement = '<img src="${1}" alt="${2}" />';
+        $result = preg_replace($imageTagPattern, $imageReplacement, $result);
         
         // Transform carriage returns
         $carriageReturnPattern = '/\n/';

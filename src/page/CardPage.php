@@ -48,21 +48,25 @@ class CardPage extends Page
     {
         switch($bloc->type)
         {
-            // Main bloc
+            // Wrapper bloc
             case 1:
                 $this->renderWrapperBloc($bloc);
                 break;
-            // Sub bloc
+            // Info bloc
             case 2:
                 $this->renderInfoBloc($bloc);
                 break;
-            // Sub bloc line
+            // Info item
             case 3:
-                $this->renderInfoLine($bloc);
+                $this->renderInfoItem($bloc);
                 break;
-            // Modal bloc
+            // Schema bloc
             case 4:
-                $this->renderModalBloc($bloc);
+                $this->renderSchemaBloc($bloc);
+                break;
+            // Schema item
+            case 5:
+                $this->renderSchemaItem($bloc);
                 break;
             default:
                 ?>
@@ -70,35 +74,6 @@ class CardPage extends Page
                 <?php
                 break;
         }
-    }
-    
-    private function renderWrapperBloc($bloc)
-    {
-        ?>
-        <div class="panel panel-default">
-            <div class="panel-heading" data-toggle="collapse" data-target="#<?= $bloc->id ?>-body">
-                <h4><?= $bloc->content ?></h4>
-            </div>
-            <div id="<?= $bloc->id ?>-body" class="collapse in">
-                <div class="panel-body">
-                    <?php
-                        if (!is_null($bloc->children)) {
-                            foreach ($bloc->children as $bloc) {
-                                $this->renderBloc($bloc);
-                            }
-                        }
-                    ?>
-                </div>
-            </div>
-        </div>
-        <?php
-    }
-    
-    private function renderModalBloc($bloc)
-    {
-        ?>
-            
-        <?php
     }
     
     private function renderInfoBloc($bloc)
@@ -117,7 +92,7 @@ class CardPage extends Page
         <?php
     }
     
-    private function renderInfoLine($bloc)
+    private function renderInfoItem($bloc)
     {
         if (!is_null($bloc->roles) && !empty($bloc->roles)) {
             ?>
@@ -133,6 +108,68 @@ class CardPage extends Page
         ?>
             <?= $this->buildContent($bloc->content) ?>
         </li>
+        <?php
+    }
+    
+    private function renderSchemaBloc($bloc)
+    {
+        ?>
+        <h4><?= $bloc->content ?></h4>
+        <?php
+            if (!is_null($bloc->children)) {
+                foreach ($bloc->children as $bloc) {
+                    $this->renderBloc($bloc);
+                }
+            }
+    }
+    
+    private function renderSchemaItem($bloc)
+    {
+        $schemaTagPattern = '/\[schema:([^\|]*)\|([^\]]*)\]/';
+        preg_match($schemaTagPattern, $bloc->content, $matches);
+        $url = $matches[1];
+        $title = $matches[2];
+
+        ?>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-<?= $bloc->id ?>"><?= $title ?></button>
+        <div class="modal" id="modal-<?= $bloc->id ?>" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><?= $title ?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <img src="<?= $url ?>" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+    
+    private function renderWrapperBloc($bloc)
+    {
+        ?>
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" data-target="#body-<?= $bloc->id ?>">
+                <h4><?= $bloc->content ?></h4>
+            </div>
+            <div id="body-<?= $bloc->id ?>" class="collapse in">
+                <div class="panel-body">
+                    <?php
+                        if (!is_null($bloc->children)) {
+                            foreach ($bloc->children as $bloc) {
+                                $this->renderBloc($bloc);
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+        </div>
         <?php
     }
 }
